@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  price       Decimal  @db.Decimal(12, 2)
+  
+  // Location
+  address     String
+  city        String   @default("Madrid")
+  neighborhood String?
+  postalCode  String?
+  latitude    Decimal? @db.Decimal(10, 8)
+  longitude   Decimal? @db.Decimal(11, 8)
+  
+  // Property details
+  propertyType PropertyType @default(APARTMENT)
+  bedrooms    Int
+  bathrooms   Int
+  squareMeters Int
+  floor       Int?
+  hasElevator Boolean @default(false)
+  hasParking  Boolean @default(false)
+  hasStorage  Boolean @default(false)
+  hasTerrace  Boolean @default(false)
+  hasPool     Boolean @default(false)
+  hasAC       Boolean @default(false)
+  yearBuilt   Int?
+  energyRating String?
+  
+  // Status
+  status      PropertyStatus @default(AVAILABLE)
+  featured    Boolean @default(false)
+  
+  // Images
+  images      PropertyImage[]
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([status])
+  @@index([propertyType])
+  @@index([city])
+  @@index([featured])
+}
+
+model PropertyImage {
+  id         String   @id @default(cuid())
+  url        String
+  key        String   // S3 key for deletion
+  order      Int      @default(0)
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  createdAt  DateTime @default(now())
+  
+  @@index([propertyId])
+}
+
+model ValuationRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  address   String
+  message   String?  @db.Text
+  status    RequestStatus @default(PENDING)
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ContactRequest {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  phone      String?
+  subject    String?
+  message    String   @db.Text
+  propertyId String?  // Optional: if inquiry is about specific property
+  status     RequestStatus @default(PENDING)
+  notes      String?  @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@index([status])
+  @@index([createdAt])
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  cognitoId String   @unique
+  role      AdminRole @default(AGENT)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  PENTHOUSE
+  STUDIO
+  DUPLEX
+  LOFT
+  COMMERCIAL
+  LAND
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  RENTED
+  OFF_MARKET
+}
+
+enum RequestStatus {
+  PENDING
+  CONTACTED
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+enum AdminRole {
+  ADMIN
+  AGENT
+}
