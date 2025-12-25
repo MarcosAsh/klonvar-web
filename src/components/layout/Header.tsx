@@ -15,14 +15,15 @@ import {
   DrawerCloseButton,
   DrawerBody,
   Link as ChakraLink,
-  Image,
+  Text,
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
 const MotionBox = motion(Box);
+const MotionFlex = motion(Flex);
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
@@ -30,7 +31,6 @@ const navLinks = [
   { href: '/comprar', label: 'Comprar' },
   { href: '/propiedades', label: 'Propiedades' },
   { href: '/nosotros', label: 'Nosotros' },
-  { href: '/opiniones', label: 'Opiniones' },
   { href: '/contacto', label: 'Contacto' },
 ];
 
@@ -39,16 +39,23 @@ export function Header() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
+  // Smooth transforms for glass effect
   const headerBg = useTransform(
     scrollY,
-    [0, 100],
-    ['rgba(254, 253, 251, 0)', 'rgba(254, 253, 251, 0.95)']
+    [0, 50],
+    ['rgba(250, 250, 250, 0)', 'rgba(250, 250, 250, 0.72)']
   );
 
-  const headerShadow = useTransform(
+  const headerBlur = useTransform(
     scrollY,
-    [0, 100],
-    ['0 0 0 rgba(26, 54, 93, 0)', '0 4px 20px rgba(26, 54, 93, 0.08)']
+    [0, 50],
+    ['blur(0px)', 'blur(20px)']
+  );
+
+  const headerBorder = useTransform(
+    scrollY,
+    [0, 50],
+    ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.04)']
   );
 
   const isActive = (href: string) => {
@@ -57,145 +64,217 @@ export function Header() {
   };
 
   return (
-    <MotionBox
-      as="header"
-      position="fixed"
-      top={0}
-      left={0}
-      right={0}
-      zIndex={100}
-      style={{
-        backgroundColor: headerBg as unknown as string,
-        boxShadow: headerShadow as unknown as string,
-      }}
-      backdropFilter="blur(10px)"
-    >
-      <Container maxW="container.xl" py={4}>
-        <Flex justify="space-between" align="center">
-          {/* Logo */}
-          <Link href="/" passHref>
-            <ChakraLink
-              display="flex"
-              alignItems="center"
-              _hover={{ opacity: 0.8 }}
-              transition="opacity 0.2s"
-            >
-              <Image
-                src="/logo.png"
-                alt="Klonvar Inmobiliaria"
-                h={{ base: '40px', md: '50px' }}
-                objectFit="contain"
-              />
-            </ChakraLink>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <HStack
-            as="nav"
-            spacing={8}
-            display={{ base: 'none', lg: 'flex' }}
-          >
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} passHref>
-                <ChakraLink
-                  fontFamily="body"
-                  fontSize="sm"
-                  fontWeight={isActive(link.href) ? '600' : '500'}
-                  color={isActive(link.href) ? 'brand.teal.600' : 'brand.navy.900'}
+    <>
+      <MotionBox
+        as="header"
+        position="fixed"
+        top={0}
+        left={0}
+        right={0}
+        zIndex={100}
+        style={{
+          backgroundColor: headerBg as unknown as string,
+          backdropFilter: headerBlur as unknown as string,
+          WebkitBackdropFilter: headerBlur as unknown as string,
+          borderBottom: `1px solid ${headerBorder}`,
+        }}
+      >
+        <Container maxW="container.xl" py={4}>
+          <Flex justify="space-between" align="center">
+            {/* Logo */}
+            <Link href="/" passHref>
+              <ChakraLink
+                display="flex"
+                alignItems="center"
+                gap={2}
+                _hover={{ opacity: 0.8, textDecoration: 'none' }}
+                transition="opacity 0.2s ease"
+              >
+                {/* Liquid Glass Logo Mark */}
+                <Box
+                  w="40px"
+                  h="40px"
+                  borderRadius="12px"
+                  bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
                   position="relative"
-                  _hover={{ color: 'brand.teal.600' }}
-                  _after={{
+                  overflow="hidden"
+                  boxShadow="0 4px 12px rgba(6, 182, 212, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)"
+                  _before={{
                     content: '""',
                     position: 'absolute',
-                    bottom: '-4px',
+                    top: 0,
                     left: 0,
-                    width: isActive(link.href) ? '100%' : '0%',
-                    height: '2px',
-                    bg: 'brand.teal.500',
-                    transition: 'width 0.3s ease',
-                  }}
-                  sx={{
-                    '&:hover::after': {
-                      width: '100%',
-                    },
+                    right: 0,
+                    height: '50%',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%)',
+                    borderRadius: '12px 12px 0 0',
                   }}
                 >
-                  {link.label}
-                </ChakraLink>
-              </Link>
-            ))}
-          </HStack>
-
-          {/* CTA Button */}
-          <HStack spacing={4}>
-            <Link href="/valoracion" passHref>
-              <Button
-                as="a"
-                variant="primary"
-                size="md"
-                display={{ base: 'none', md: 'flex' }}
-                px={6}
-              >
-                Valoración Gratuita
-              </Button>
+                  <Text
+                    fontFamily="heading"
+                    fontWeight="700"
+                    fontSize="18px"
+                    color="white"
+                    letterSpacing="-0.02em"
+                  >
+                    K
+                  </Text>
+                </Box>
+                <Text
+                  fontFamily="heading"
+                  fontWeight="600"
+                  fontSize="20px"
+                  color="brand.charcoal.900"
+                  letterSpacing="-0.02em"
+                  display={{ base: 'none', sm: 'block' }}
+                >
+                  Klonvar
+                </Text>
+              </ChakraLink>
             </Link>
 
-            {/* Mobile Menu Button */}
-            <IconButton
-              aria-label="Abrir menú"
-              icon={<HamburgerIcon boxSize={6} />}
-              variant="ghost"
-              display={{ base: 'flex', lg: 'none' }}
-              onClick={onOpen}
-            />
-          </HStack>
-        </Flex>
-      </Container>
-
-      {/* Mobile Navigation Drawer */}
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="sm">
-        <DrawerOverlay backdropFilter="blur(4px)" />
-        <DrawerContent bg="brand.cream.50">
-          <DrawerCloseButton size="lg" mt={2} />
-          <DrawerBody pt={16}>
-            <VStack spacing={6} align="stretch">
+            {/* Desktop Navigation - Floating Glass Pill */}
+            <MotionFlex
+              as="nav"
+              display={{ base: 'none', lg: 'flex' }}
+              bg="rgba(255, 255, 255, 0.72)"
+              backdropFilter="blur(20px) saturate(180%)"
+              borderRadius="980px"
+              border="1px solid rgba(0, 0, 0, 0.04)"
+              boxShadow="0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8)"
+              px={2}
+              py={1.5}
+              gap={1}
+            >
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href} passHref>
                   <ChakraLink
-                    onClick={onClose}
-                    py={3}
                     px={4}
-                    fontSize="lg"
+                    py={2}
+                    borderRadius="980px"
+                    fontSize="14px"
                     fontWeight={isActive(link.href) ? '600' : '500'}
-                    color={isActive(link.href) ? 'brand.teal.600' : 'brand.navy.900'}
-                    bg={isActive(link.href) ? 'brand.cream.200' : 'transparent'}
-                    borderRadius="lg"
+                    color={isActive(link.href) ? 'brand.charcoal.900' : 'brand.charcoal.600'}
+                    bg={isActive(link.href) ? 'rgba(0, 0, 0, 0.04)' : 'transparent'}
+                    transition="all 0.2s ease"
                     _hover={{
-                      bg: 'brand.cream.200',
-                      color: 'brand.teal.600',
+                      bg: 'rgba(0, 0, 0, 0.04)',
+                      color: 'brand.charcoal.900',
+                      textDecoration: 'none',
                     }}
                   >
                     {link.label}
                   </ChakraLink>
                 </Link>
               ))}
-              <Box pt={4}>
+            </MotionFlex>
+
+            {/* CTA Button */}
+            <HStack spacing={3}>
+              <Link href="/valoracion" passHref>
+                <Button
+                  as="a"
+                  variant="primary"
+                  size="md"
+                  display={{ base: 'none', md: 'flex' }}
+                >
+                  Valoración Gratuita
+                </Button>
+              </Link>
+
+              {/* Mobile Menu Button */}
+              <IconButton
+                aria-label="Abrir menú"
+                icon={<HamburgerIcon boxSize={5} />}
+                variant="ghost"
+                display={{ base: 'flex', lg: 'none' }}
+                onClick={onOpen}
+                borderRadius="12px"
+                bg="rgba(0, 0, 0, 0.02)"
+                _hover={{ bg: 'rgba(0, 0, 0, 0.04)' }}
+              />
+            </HStack>
+          </Flex>
+        </Container>
+      </MotionBox>
+
+      {/* Mobile Navigation Drawer - Glass Style */}
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
+        <DrawerOverlay bg="rgba(250, 250, 250, 0.8)" backdropFilter="blur(20px)" />
+        <DrawerContent bg="transparent" boxShadow="none">
+          <DrawerCloseButton
+            size="lg"
+            top={4}
+            right={4}
+            borderRadius="12px"
+            bg="rgba(0, 0, 0, 0.04)"
+            _hover={{ bg: 'rgba(0, 0, 0, 0.08)' }}
+          />
+          <DrawerBody
+            pt={20}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <VStack spacing={4} align="center">
+              <AnimatePresence>
+                {navLinks.map((link, index) => (
+                  <MotionBox
+                    key={link.href}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <Link href={link.href} passHref>
+                      <ChakraLink
+                        onClick={onClose}
+                        display="block"
+                        py={3}
+                        px={8}
+                        fontSize="28px"
+                        fontWeight={isActive(link.href) ? '600' : '500'}
+                        fontFamily="heading"
+                        color={isActive(link.href) ? 'brand.glass.600' : 'brand.charcoal.900'}
+                        letterSpacing="-0.02em"
+                        textAlign="center"
+                        transition="all 0.2s ease"
+                        _hover={{
+                          color: 'brand.glass.600',
+                          textDecoration: 'none',
+                        }}
+                      >
+                        {link.label}
+                      </ChakraLink>
+                    </Link>
+                  </MotionBox>
+                ))}
+              </AnimatePresence>
+              <MotionBox
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: navLinks.length * 0.05 }}
+                pt={6}
+              >
                 <Link href="/valoracion" passHref>
                   <Button
                     as="a"
                     variant="primary"
-                    size="lg"
-                    width="100%"
+                    size="xl"
                     onClick={onClose}
                   >
                     Valoración Gratuita
                   </Button>
                 </Link>
-              </Box>
+              </MotionBox>
             </VStack>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </MotionBox>
+    </>
   );
 }

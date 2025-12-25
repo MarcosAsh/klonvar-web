@@ -68,47 +68,43 @@ export async function sendValuationNotification(data: {
     <html>
     <head>
       <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1d1d1f; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #1a365d; color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; background: #f9f9f9; }
-        .field { margin-bottom: 15px; }
-        .label { font-weight: bold; color: #1a365d; }
-        .value { margin-top: 5px; }
+        .header { background: linear-gradient(135deg, #1d1d1f, #2d2d2f); color: white; padding: 30px; border-radius: 16px 16px 0 0; }
+        .content { padding: 30px; background: #fafafa; border-radius: 0 0 16px 16px; }
+        .field { margin-bottom: 20px; padding: 15px; background: white; border-radius: 12px; }
+        .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #6d6d6d; margin-bottom: 5px; }
+        .value { font-size: 16px; font-weight: 500; }
       </style>
     </head>
     <body>
       <div class="container">
         <div class="header">
-          <h1>Nueva Solicitud de Valoración</h1>
+          <h1 style="margin: 0; font-size: 24px;">Nueva Solicitud de Valoración</h1>
         </div>
         <div class="content">
           <div class="field">
-            <div class="label">Nombre:</div>
+            <div class="label">Nombre</div>
             <div class="value">${data.name}</div>
           </div>
           <div class="field">
-            <div class="label">Email:</div>
+            <div class="label">Email</div>
             <div class="value">${data.email}</div>
           </div>
           <div class="field">
-            <div class="label">Teléfono:</div>
+            <div class="label">Teléfono</div>
             <div class="value">${data.phone}</div>
           </div>
           <div class="field">
-            <div class="label">Dirección del inmueble:</div>
+            <div class="label">Dirección del inmueble</div>
             <div class="value">${data.address}</div>
           </div>
-          ${
-            data.message
-              ? `
+          ${data.message ? `
           <div class="field">
-            <div class="label">Mensaje:</div>
+            <div class="label">Mensaje</div>
             <div class="value">${data.message}</div>
           </div>
-          `
-              : ''
-          }
+          ` : ''}
         </div>
       </div>
     </body>
@@ -144,63 +140,51 @@ export async function sendContactNotification(data: {
     <html>
     <head>
       <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1d1d1f; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: #1a365d; color: white; padding: 20px; text-align: center; }
-        .content { padding: 20px; background: #f9f9f9; }
-        .field { margin-bottom: 15px; }
-        .label { font-weight: bold; color: #1a365d; }
-        .value { margin-top: 5px; }
+        .header { background: linear-gradient(135deg, #1d1d1f, #2d2d2f); color: white; padding: 30px; border-radius: 16px 16px 0 0; }
+        .content { padding: 30px; background: #fafafa; border-radius: 0 0 16px 16px; }
+        .field { margin-bottom: 20px; padding: 15px; background: white; border-radius: 12px; }
+        .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #6d6d6d; margin-bottom: 5px; }
+        .value { font-size: 16px; font-weight: 500; }
       </style>
     </head>
     <body>
       <div class="container">
         <div class="header">
-          <h1>Nuevo Mensaje de Contacto</h1>
+          <h1 style="margin: 0; font-size: 24px;">Nuevo Mensaje de Contacto</h1>
         </div>
         <div class="content">
           <div class="field">
-            <div class="label">Nombre:</div>
+            <div class="label">Nombre</div>
             <div class="value">${data.name}</div>
           </div>
           <div class="field">
-            <div class="label">Email:</div>
+            <div class="label">Email</div>
             <div class="value">${data.email}</div>
           </div>
-          ${
-            data.phone
-              ? `
+          ${data.phone ? `
           <div class="field">
-            <div class="label">Teléfono:</div>
+            <div class="label">Teléfono</div>
             <div class="value">${data.phone}</div>
           </div>
-          `
-              : ''
-          }
-          ${
-            data.subject
-              ? `
+          ` : ''}
+          ${data.subject ? `
           <div class="field">
-            <div class="label">Asunto:</div>
+            <div class="label">Asunto</div>
             <div class="value">${data.subject}</div>
           </div>
-          `
-              : ''
-          }
+          ` : ''}
           <div class="field">
-            <div class="label">Mensaje:</div>
+            <div class="label">Mensaje</div>
             <div class="value">${data.message}</div>
           </div>
-          ${
-            data.propertyId
-              ? `
+          ${data.propertyId ? `
           <div class="field">
-            <div class="label">Propiedad relacionada:</div>
+            <div class="label">Propiedad relacionada</div>
             <div class="value">${data.propertyId}</div>
           </div>
-          `
-              : ''
-          }
+          ` : ''}
         </div>
       </div>
     </body>

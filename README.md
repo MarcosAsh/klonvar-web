@@ -1,15 +1,39 @@
-# Klonvar Inmobiliaria - Website
+# Klonvar Inmobiliaria - Liquid Glass Edition
 
-A sleek, modern real estate website built with Next.js 14, Chakra UI, and AWS backend services.
+A stunning, Apple-inspired real estate website built with Next.js 14, Chakra UI, and modern liquid glass design aesthetics.
 
-## 🏠 Features
+## ✨ Design Philosophy
 
-- **Beautiful Design**: Luxury minimal aesthetic with warm tones, elegant typography, and smooth animations
-- **Property Listings**: Browse, filter, and view property details
-- **Lead Capture Forms**: Valuation requests and contact forms with validation
-- **Admin Panel Ready**: Database schema supports full property management
-- **AWS Integration**: S3 for images, SES for emails, Cognito for auth, RDS for database
-- **Security First**: Input sanitization, rate limiting, parameterized queries
+This redesign embraces Apple's **Liquid Glass** design language introduced at WWDC 2025:
+
+- **Glassmorphism 2.0**: Translucent surfaces with backdrop blur, saturation, and subtle light reflections
+- **Organic Motion**: Smooth, physics-based animations with Framer Motion
+- **Typography**: Clean system fonts (-apple-system stack) with careful letter-spacing
+- **Color Palette**: Refined teal accents with warm amber highlights on neutral stone backgrounds
+- **Depth & Layering**: Multi-layer glass effects with inset highlights and soft shadows
+
+## 🎨 Key Visual Features
+
+### Glass Card System
+```tsx
+<GlassCard variant="default" />  // Standard frosted glass
+<GlassCard variant="elevated" /> // More prominent, higher blur
+<GlassCard variant="subtle" />   // Lighter, background elements
+<GlassCard variant="dark" />     // Dark mode glass
+<GlassCard variant="accent" />   // Gradient tint glass
+```
+
+### Animated Background Orbs
+Floating gradient spheres with subtle animations create depth and visual interest.
+
+### Floating Navigation
+Pill-shaped navigation bar with glass effect that adapts on scroll.
+
+### Premium Interactions
+- Scale transforms on hover
+- Smooth state transitions
+- Staggered reveal animations
+- Parallax scroll effects
 
 ## 🛠 Tech Stack
 
@@ -26,31 +50,38 @@ A sleek, modern real estate website built with Next.js 14, Chakra UI, and AWS ba
 ```
 klonvar-app/
 ├── prisma/
-│   └── schema.prisma       # Database schema
+│   └── schema.prisma
 ├── public/
-│   └── logo.png            # Company logo
 ├── src/
-│   ├── app/                # Next.js App Router pages
-│   │   ├── api/            # API routes
-│   │   ├── comprar/        # Buy page
-│   │   ├── contacto/       # Contact page
-│   │   ├── nosotros/       # About page
-│   │   ├── propiedades/    # Properties listing
-│   │   ├── valoracion/     # Valuation form
-│   │   ├── vender/         # Sell page
-│   │   ├── layout.tsx      # Root layout
-│   │   └── page.tsx        # Homepage
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── contact/
+│   │   │   ├── properties/
+│   │   │   └── valuation/
+│   │   ├── comprar/
+│   │   ├── contacto/
+│   │   ├── nosotros/
+│   │   ├── propiedades/
+│   │   ├── valoracion/
+│   │   ├── vender/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── providers.tsx
 │   ├── components/
-│   │   ├── layout/         # Header, Footer
-│   │   └── property/       # Property card
+│   │   ├── layout/
+│   │   │   ├── Header.tsx      # Floating glass navigation
+│   │   │   └── Footer.tsx      # Dark theme footer
+│   │   ├── property/
+│   │   │   └── PropertyCard.tsx
+│   │   └── ui/
+│   │       └── GlassCard.tsx   # Reusable glass components
 │   ├── lib/
-│   │   ├── aws/            # AWS clients (S3, SES, Cognito)
-│   │   ├── db/             # Prisma client
-│   │   ├── utils/          # Rate limiting
-│   │   └── validation/     # Zod schemas
+│   │   ├── aws/
+│   │   ├── db/
+│   │   ├── utils/
+│   │   └── validation/
 │   └── styles/
-│       └── theme.ts        # Chakra UI theme
-├── .env.example            # Environment variables template
+│       └── theme.ts            # Liquid glass theme config
 ├── package.json
 └── README.md
 ```
@@ -65,121 +96,93 @@ npm install
 
 ### 2. Configure Environment Variables
 
-Copy `.env.example` to `.env.local` and fill in your values:
+Create `.env.local`:
 
-```bash
-cp .env.example .env.local
+```env
+DATABASE_URL="postgresql://..."
+AWS_REGION="eu-west-1"
+AWS_ACCESS_KEY_ID="..."
+AWS_SECRET_ACCESS_KEY="..."
+AWS_S3_BUCKET="klonvar-property-images"
+AWS_SES_FROM_EMAIL="info@klonvar.com"
+NOTIFICATION_EMAIL="info@klonvar.com"
 ```
 
-Required variables:
-- `DATABASE_URL` - PostgreSQL connection string
-- `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` - AWS credentials
-- `AWS_S3_BUCKET` - S3 bucket for property images
-- `AWS_SES_FROM_EMAIL`, `NOTIFICATION_EMAIL` - Email settings
-- `COGNITO_USER_POOL_ID`, `COGNITO_CLIENT_ID` - Cognito for admin auth
-
-### 3. Set Up AWS Resources
-
-#### RDS (PostgreSQL)
-1. Create a PostgreSQL RDS instance
-2. Configure security groups to allow access
-3. Update `DATABASE_URL` in your env
-
-#### S3
-1. Create an S3 bucket for property images
-2. Configure CORS for uploads
-3. Update `AWS_S3_BUCKET` in your env
-
-#### SES
-1. Verify your domain/email in SES
-2. Move out of sandbox if needed
-3. Update email variables in your env
-
-#### Cognito (Optional - for admin)
-1. Create a User Pool
-2. Add your admin users
-3. Update Cognito variables in your env
-
-### 4. Set Up Database
+### 3. Set Up Database
 
 ```bash
-# Generate Prisma client
 npx prisma generate
-
-# Run migrations
 npx prisma migrate dev
-
-# (Optional) Open Prisma Studio
-npx prisma studio
 ```
 
-### 5. Run Development Server
+### 4. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
-
-## 📦 Deployment
-
-### Vercel (Recommended for Frontend)
-
-1. Push to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy!
-
-### Environment Variables in Vercel
-Add all variables from `.env.example` in your Vercel project settings.
-
-## 🎨 Customization
+## 🎨 Customizing the Theme
 
 ### Colors
-Edit `src/styles/theme.ts` to change the color palette:
-- `brand.navy` - Primary dark color
-- `brand.cream` - Background colors
-- `brand.teal` - Accent color (from logo)
-- `brand.gold` - Premium accent
 
-### Fonts
-The site uses:
-- **Headings**: Cormorant Garamond (elegant serif)
-- **Body**: DM Sans (clean sans-serif)
+Edit `src/styles/theme.ts`:
 
-Change in `src/app/layout.tsx` and `src/styles/theme.ts`
+```ts
+colors: {
+  brand: {
+    charcoal: { ... },  // Primary dark tones
+    stone: { ... },     // Background neutrals
+    glass: { ... },     // Teal accent (main brand)
+    accent: { ... },    // Warm amber highlights
+  }
+}
+```
 
-### Content
-Update Spanish text directly in the page components under `src/app/`
+### Glass Effects
 
-## 🔒 Security Features
+Adjust in the theme's `layerStyles`:
 
-- **Input Sanitization**: All form inputs sanitized with DOMPurify
-- **Validation**: Zod schemas validate all data
-- **Rate Limiting**: Form submissions are rate-limited
-- **Parameterized Queries**: Prisma prevents SQL injection
-- **Image Validation**: File type and size checks on uploads
+```ts
+glassCard: {
+  bg: 'rgba(255, 255, 255, 0.72)',
+  backdropFilter: 'blur(20px) saturate(180%)',
+  border: '1px solid rgba(255, 255, 255, 0.22)',
+  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+}
+```
 
 ## 📱 Pages
 
 | Page | Route | Description |
 |------|-------|-------------|
-| Home | `/` | Main landing page |
-| Sell | `/vender` | Services for sellers |
-| Buy | `/comprar` | Services for buyers |
-| Properties | `/propiedades` | Property listings |
-| Valuation | `/valoracion` | Free valuation form |
-| About | `/nosotros` | About the company |
-| Contact | `/contacto` | Contact form |
+| Home | `/` | Hero with floating cards, benefits, process |
+| Vender | `/vender` | Sell services with dark hero |
+| Comprar | `/comprar` | Buy services with amber accents |
+| Propiedades | `/propiedades` | Property grid with glass filters |
+| Valoración | `/valoracion` | Valuation form with glass card |
+| Nosotros | `/nosotros` | About page with values |
+| Contacto | `/contacto` | Contact form with info cards |
 
-## 🔌 API Routes
+## 🔮 Design Patterns Used
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/valuation` | POST | Submit valuation request |
-| `/api/contact` | POST | Submit contact form |
-| `/api/properties` | GET | List properties with filters |
-| `/api/properties/[id]` | GET | Get single property |
+### 1. Floating Glass Navigation
+Navigation morphs from transparent to frosted glass on scroll.
+
+### 2. Gradient Orb Backgrounds
+Animated radial gradients create depth without cluttering the UI.
+
+### 3. Glass Card Hierarchy
+Different glass variants establish visual hierarchy:
+- `elevated`: Primary content (forms, featured items)
+- `default`: Secondary content (cards, listings)
+- `subtle`: Background elements (filter bars)
+- `dark`: Dark sections (footers, CTAs)
+
+### 4. Pill-shaped Elements
+Apple-style rounded buttons and pills (border-radius: 980px).
+
+### 5. Inset Highlights
+`inset 0 1px 0 rgba(255, 255, 255, 0.6)` creates a subtle top highlight simulating light reflection.
 
 ## 📄 License
 
@@ -187,4 +190,4 @@ Private - Klonvar Invest S.L.
 
 ---
 
-Built with ❤️ for Klonvar Inmobiliaria
+Built with ❤️ and liquid glass aesthetics

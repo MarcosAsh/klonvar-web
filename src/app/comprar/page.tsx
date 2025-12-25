@@ -1,73 +1,325 @@
 'use client';
 
-import { Box, Button, Container, Grid, GridItem, Heading, HStack, Icon, SimpleGrid, Text, VStack } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  GridItem,
+  Heading,
+  HStack,
+  Icon,
+  SimpleGrid,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
-import { FiCheckCircle, FiArrowRight, FiSearch, FiHome, FiFileText, FiKey } from 'react-icons/fi';
+import { useRef } from 'react';
+import {
+  FiArrowRight,
+  FiCheck,
+  FiSearch,
+  FiHome,
+  FiFileText,
+  FiKey,
+} from 'react-icons/fi';
 import { Header, Footer } from '@/components/layout';
+import { GlassCard, GlassPill } from '@/components/ui/GlassCard';
 
 const MotionBox = motion(Box);
+
 const features = [
-  { icon: FiSearch, title: 'Búsqueda personalizada', text: 'Te ayudamos a definir exactamente lo que buscas.' },
-  { icon: FiHome, title: 'Selección de viviendas', text: 'Filtramos las opciones que mejor encajan contigo.' },
-  { icon: FiFileText, title: 'Asesoramiento', text: 'Te acompañamos en visitas y negociación.' },
-  { icon: FiKey, title: 'Hasta las llaves', text: 'Revisión documental y acompañamiento hasta la firma.' },
+  {
+    icon: FiSearch,
+    title: 'Búsqueda personalizada',
+    description: 'Te ayudamos a definir exactamente lo que buscas según tus necesidades y presupuesto.',
+  },
+  {
+    icon: FiHome,
+    title: 'Selección de viviendas',
+    description: 'Filtramos las opciones que mejor encajan contigo para ahorrarte tiempo.',
+  },
+  {
+    icon: FiFileText,
+    title: 'Asesoramiento completo',
+    description: 'Te acompañamos en las visitas y en toda la negociación.',
+  },
+  {
+    icon: FiKey,
+    title: 'Hasta las llaves',
+    description: 'Revisión documental y acompañamiento hasta la firma en notaría.',
+  },
 ];
+
+const benefits = [
+  'Te ayudamos a definir lo que buscas',
+  'Seleccionamos viviendas que encajen',
+  'Asesoramiento en la negociación',
+  'Revisión de documentación',
+  'Acompañamiento hasta la firma',
+];
+
+function AnimatedSection({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-100px' });
+
+  return (
+    <MotionBox
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {children}
+    </MotionBox>
+  );
+}
 
 export default function ComprarPage() {
   return (
-    <Box>
+    <Box bg="#fafafa" minH="100vh">
       <Header />
-      <Box bg="brand.navy.900" pt={{ base: 32, md: 40 }} pb={{ base: 16, md: 24 }}>
-        <Container maxW="container.xl">
-          <VStack spacing={6} textAlign="center" maxW="2xl" mx="auto">
-            <MotionBox initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <Text fontSize="sm" fontWeight="600" color="brand.gold.400" letterSpacing="wider" textTransform="uppercase" mb={4}>Compra tu vivienda</Text>
-              <Heading as="h1" textStyle="heroTitle" color="white" mb={6}>Encuentra tu vivienda ideal en Madrid</Heading>
-              <Text fontSize="xl" color="whiteAlpha.800">Te ayudamos a comprar con seguridad y sin sorpresas.</Text>
+
+      {/* Hero Section */}
+      <Box position="relative" overflow="hidden">
+        {/* Gradient background */}
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg="brand.charcoal.900"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: '-20%',
+            left: '-10%',
+            width: '50%',
+            height: '70%',
+            background: 'radial-gradient(ellipse, rgba(245, 158, 11, 0.12) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+          }}
+          _after={{
+            content: '""',
+            position: 'absolute',
+            bottom: '-30%',
+            right: '-5%',
+            width: '60%',
+            height: '80%',
+            background: 'radial-gradient(ellipse, rgba(6, 182, 212, 0.1) 0%, transparent 70%)',
+            filter: 'blur(60px)',
+          }}
+        />
+
+        <Container maxW="container.xl" position="relative" zIndex={1} pt={{ base: 32, md: 40 }} pb={{ base: 20, md: 28 }}>
+          <VStack spacing={6} textAlign="center" maxW="700px" mx="auto">
+            <MotionBox
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <GlassPill colorScheme="amber">
+                <Text>Compra tu vivienda</Text>
+              </GlassPill>
+            </MotionBox>
+
+            <MotionBox
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <Heading textStyle="heroTitle" color="white" mb={4}>
+                Encuentra tu vivienda ideal en Madrid
+              </Heading>
+              <Text fontSize="xl" color="whiteAlpha.700" maxW="500px" mx="auto">
+                Te ayudamos a comprar con seguridad, sin sorpresas y con acompañamiento profesional en cada paso.
+              </Text>
+            </MotionBox>
+
+            <MotionBox
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <HStack spacing={4} pt={4}>
+                <Link href="/propiedades">
+                  <Button
+                    size="xl"
+                    bg="white"
+                    color="brand.charcoal.900"
+                    rightIcon={<FiArrowRight />}
+                    _hover={{
+                      bg: 'whiteAlpha.900',
+                      transform: 'scale(1.02)',
+                    }}
+                  >
+                    Ver Viviendas
+                  </Button>
+                </Link>
+                <Link href="/contacto">
+                  <Button
+                    size="xl"
+                    variant="ghost"
+                    color="white"
+                    _hover={{ bg: 'whiteAlpha.100' }}
+                  >
+                    Contactar
+                  </Button>
+                </Link>
+              </HStack>
             </MotionBox>
           </VStack>
         </Container>
       </Box>
 
-      <Box py={{ base: 16, md: 24 }} bg="brand.cream.50">
+      {/* What We Do Section */}
+      <Box py={{ base: 20, md: 32 }}>
         <Container maxW="container.xl">
-          <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={16} alignItems="center" mb={20}>
+          <Grid templateColumns={{ base: '1fr', lg: '1fr 1fr' }} gap={{ base: 12, lg: 20 }} alignItems="center">
             <GridItem order={{ base: 2, lg: 1 }}>
-              <Box borderRadius="2xl" overflow="hidden" bg="brand.gold.100" h="400px" display="flex" alignItems="center" justifyContent="center">
-                <Icon as={FiKey} boxSize={24} color="brand.gold.300" />
-              </Box>
+              <AnimatedSection delay={0.2}>
+                <GlassCard variant="accent" p={0} overflow="hidden">
+                  <Box
+                    h="400px"
+                    bg="linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%)"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    position="relative"
+                  >
+                    <Icon as={FiKey} boxSize={24} color="brand.accent.200" />
+                  </Box>
+                </GlassCard>
+              </AnimatedSection>
             </GridItem>
+
             <GridItem order={{ base: 1, lg: 2 }}>
-              <Text fontSize="sm" fontWeight="600" color="brand.gold.600" letterSpacing="wider" textTransform="uppercase" mb={4}>¿Qué hacemos por ti?</Text>
-              <Heading textStyle="sectionTitle" mb={6}>Comprar una vivienda es una decisión importante</Heading>
-              <Text textStyle="subtitle" mb={8}>Te ayudamos a encontrar la que encaja contigo y te acompañamos durante todo el proceso para que compres con tranquilidad.</Text>
-              <VStack align="flex-start" spacing={4} mb={8}>
-                {['Te ayudamos a definir lo que buscas', 'Seleccionamos viviendas que encajen', 'Asesoramiento en la negociación', 'Revisión de documentación', 'Acompañamiento hasta la firma'].map((item) => (
-                  <HStack key={item} spacing={3}><Icon as={FiCheckCircle} color="brand.gold.500" boxSize={5} /><Text fontWeight="500">{item}</Text></HStack>
-                ))}
-              </VStack>
-              <Link href="/propiedades"><Button variant="gold" size="lg" rightIcon={<FiArrowRight />}>Ver Viviendas Disponibles</Button></Link>
+              <AnimatedSection>
+                <VStack align="flex-start" spacing={6}>
+                  <Text textStyle="eyebrow">¿Qué hacemos por ti?</Text>
+                  <Heading textStyle="sectionTitle" maxW="420px">
+                    Comprar una vivienda es una decisión importante
+                  </Heading>
+                  <Text textStyle="subtitle" maxW="450px">
+                    Te ayudamos a encontrar la que encaja contigo y te acompañamos durante todo el proceso para que compres con tranquilidad.
+                  </Text>
+
+                  <VStack align="flex-start" spacing={3} pt={4}>
+                    {benefits.map((benefit) => (
+                      <HStack key={benefit} spacing={3}>
+                        <Box
+                          w={6}
+                          h={6}
+                          borderRadius="8px"
+                          bg="brand.accent.100"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <Icon as={FiCheck} color="brand.accent.600" boxSize={4} />
+                        </Box>
+                        <Text fontWeight="500" color="brand.charcoal.800">
+                          {benefit}
+                        </Text>
+                      </HStack>
+                    ))}
+                  </VStack>
+
+                  <Box pt={4}>
+                    <Link href="/propiedades">
+                      <Button variant="accent" size="lg" rightIcon={<FiArrowRight />}>
+                        Ver Viviendas Disponibles
+                      </Button>
+                    </Link>
+                  </Box>
+                </VStack>
+              </AnimatedSection>
             </GridItem>
           </Grid>
+        </Container>
+      </Box>
 
-          <VStack spacing={4} textAlign="center" mb={12}>
-            <Text fontSize="sm" fontWeight="600" color="brand.gold.600" letterSpacing="wider" textTransform="uppercase">Nuestro servicio</Text>
-            <Heading textStyle="sectionTitle">Te acompañamos en cada paso</Heading>
-          </VStack>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={8}>
-            {features.map((f) => (
-              <VStack key={f.title} p={8} bg="white" borderRadius="xl" boxShadow="soft" spacing={4} textAlign="center">
-                <Box w={16} h={16} borderRadius="full" bg="brand.gold.100" display="flex" alignItems="center" justifyContent="center">
-                  <Icon as={f.icon} boxSize={7} color="brand.gold.600" />
-                </Box>
-                <Heading size="md" fontFamily="heading">{f.title}</Heading>
-                <Text color="brand.navy.600" fontSize="sm">{f.text}</Text>
-              </VStack>
+      {/* Services Section */}
+      <Box py={{ base: 20, md: 32 }} bg="rgba(0, 0, 0, 0.02)">
+        <Container maxW="container.xl">
+          <AnimatedSection>
+            <VStack spacing={4} textAlign="center" mb={16}>
+              <Text textStyle="eyebrow">Nuestro servicio</Text>
+              <Heading textStyle="sectionTitle" maxW="500px">
+                Te acompañamos en cada paso
+              </Heading>
+            </VStack>
+          </AnimatedSection>
+
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6}>
+            {features.map((feature, index) => (
+              <AnimatedSection key={feature.title} delay={index * 0.1}>
+                <GlassCard variant="default" p={8} h="100%" textAlign="center">
+                  <VStack spacing={5}>
+                    <Box
+                      w={16}
+                      h={16}
+                      borderRadius="20px"
+                      bg="brand.accent.100"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Icon as={feature.icon} boxSize={7} color="brand.accent.600" />
+                    </Box>
+                    <Heading size="md" fontFamily="heading">
+                      {feature.title}
+                    </Heading>
+                    <Text color="brand.charcoal.600" fontSize="14px" lineHeight="1.6">
+                      {feature.description}
+                    </Text>
+                  </VStack>
+                </GlassCard>
+              </AnimatedSection>
             ))}
           </SimpleGrid>
         </Container>
       </Box>
+
+      {/* CTA Section */}
+      <Box py={{ base: 20, md: 32 }}>
+        <Container maxW="container.lg">
+          <AnimatedSection>
+            <GlassCard
+              variant="default"
+              p={{ base: 10, md: 16 }}
+              textAlign="center"
+              sx={{
+                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(255, 255, 255, 0.72) 50%, rgba(6, 182, 212, 0.04) 100%)',
+              }}
+            >
+              <VStack spacing={6}>
+                <Heading textStyle="sectionTitle">
+                  ¿Buscas tu próxima vivienda?
+                </Heading>
+                <Text textStyle="subtitle" maxW="400px">
+                  Explora nuestras propiedades o cuéntanos qué necesitas.
+                </Text>
+                <HStack spacing={4} pt={2}>
+                  <Link href="/propiedades">
+                    <Button variant="primary" size="xl" rightIcon={<FiArrowRight />}>
+                      Ver Propiedades
+                    </Button>
+                  </Link>
+                  <Link href="/contacto">
+                    <Button variant="secondary" size="xl">
+                      Contactar
+                    </Button>
+                  </Link>
+                </HStack>
+              </VStack>
+            </GlassCard>
+          </AnimatedSection>
+        </Container>
+      </Box>
+
       <Footer />
     </Box>
   );

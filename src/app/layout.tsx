@@ -46,12 +46,18 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Apple System Font stack - no external fonts needed for SF Pro fallback */}
+        <meta name="theme-color" content="#fafafa" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body>
+      <body
+        style={{
+          margin: 0,
+          padding: 0,
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+        }}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
