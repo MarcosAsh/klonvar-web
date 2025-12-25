@@ -12,16 +12,12 @@ model Property {
   title       String
   description String   @db.Text
   price       Decimal  @db.Decimal(12, 2)
-  
-  // Location
-  address     String
+  address   z  String
   city        String   @default("Madrid")
   neighborhood String?
   postalCode  String?
   latitude    Decimal? @db.Decimal(10, 8)
   longitude   Decimal? @db.Decimal(11, 8)
-  
-  // Property details
   propertyType PropertyType @default(APARTMENT)
   bedrooms    Int
   bathrooms   Int
@@ -35,15 +31,18 @@ model Property {
   hasAC       Boolean @default(false)
   yearBuilt   Int?
   energyRating String?
-  
-  // Status
-  status      PropertyStatus @default(AVAILABLE)
+  status      PropertyStatus @default(DRAFT)
   featured    Boolean @default(false)
-  
-  // Images
   images      PropertyImage[]
-  
-  // Timestamps
+  clientId    String?
+  client      Client?   @relation(fields: [clientId], references: [id])
+  agentId     String?
+  agent       AdminUser? @relation(fields: [agentId], references: [id])
+  contract    Contract?
+  valuation   Valuation?
+  documents   Document[]
+  activities  PropertyActivity[]
+  messages    Message[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
@@ -51,18 +50,170 @@ model Property {
   @@index([propertyType])
   @@index([city])
   @@index([featured])
+  @@index([clientId])
 }
 
 model PropertyImage {
   id         String   @id @default(cuid())
   url        String
-  key        String   // S3 key for deletion
+  key        String
+  caption    String?
   order      Int      @default(0)
+  isPrimary  Boolean  @default(false)
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   propertyId String
+  uploadedById String?
   createdAt  DateTime @default(now())
-  
   @@index([propertyId])
+}
+
+model Client {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  name            String
+  phone           String?
+  dni             String?
+  address         String?
+  cognitoId       String   @unique
+  clientType      ClientType @default(SELLER)
+  status          ClientStatus @default(ACTIVE)
+  source          ClientSource @default(WEBSITE)
+  preferredContact String?
+  notes           String?  @db.Text
+  preferences     Json?
+  marketingConsent Boolean @default(false)
+  properties      Property[]
+  documents       Document[]
+  contracts       Contract[]
+  valuationRequests ValuationRequest[]
+  messages        Message[]
+  notifications   Notification[]
+  agentId         String?
+  agent           AdminUser? @relation(fields: [agentId], references: [id])
+  lastLoginAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([email])
+  @@index([cognitoId])
+  @@index([status])
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  name        String
+  type        DocumentType
+  description String?
+  url         String
+  key         String
+  size        Int?
+  mimeType    String?
+  status      DocumentStatus @default(PENDING)
+  visibleToClient Boolean @default(true)
+  clientId    String?
+  client      Client?  @relation(fields: [clientId], references: [id])
+  propertyId  String?
+  property    Property? @relation(fields: [propertyId], references: [id])
+  contractId  String?
+  contract    Contract? @relation(fields: [contractId], references: [id])
+  uploadedById String?
+  uploadedByType String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  @@index([clientId])
+  @@index([propertyId])
+  @@index([type])
+}
+
+model Contract {
+  id              String   @id @default(cuid())
+  contractType    ContractType @default(EXCLUSIVE_SALE)
+  status          ContractStatus @default(DRAFT)
+  salePrice       Decimal? @db.Decimal(12, 2)
+  commissionPercent Decimal @default(3.00) @db.Decimal(4, 2)
+  commissionAmount Decimal? @db.Decimal(12, 2)
+  startDate       DateTime?
+  endDate         DateTime?
+  duration        Int      @default(6)
+  clientSignedAt  DateTime?
+  agentSignedAt   DateTime?
+  pdfUrl          String?
+  pdfKey          String?
+  propertyId      String   @unique
+  property        Property @relation(fields: [propertyId], references: [id])
+  clientId        String
+  client          Client   @relation(fields: [clientId], references: [id])
+  documents       Document[]
+  notes           String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  @@index([status])
+  @@index([clientId])
+}
+
+model Valuation {
+  id              String   @id @default(cuid())
+  status          ValuationStatus @default(PENDING)
+  estimatedPrice  Decimal? @db.Decimal(12, 2)
+  minPrice        Decimal? @db.Decimal(12, 2)
+  maxPrice        Decimal? @db.Decimal(12, 2)
+  methodology     String?
+  comparables     Json?
+  notes           String?  @db.Text
+  reportUrl       String?
+  reportKey       String?
+  propertyId      String   @unique
+  property        Property @relation(fields: [propertyId], references: [id])
+  valuedAt        DateTime?
+  validUntil      DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  content     String   @db.Text
+  senderType  String
+  senderId    String
+  clientId    String?
+  client      Client?  @relation(fields: [clientId], references: [id])
+  adminId     String?
+  admin       AdminUser? @relation("SentMessages", fields: [adminId], references: [id])
+  propertyId  String?
+  property    Property? @relation(fields: [propertyId], references: [id])
+  attachments Json?
+  readAt      DateTime?
+  createdAt   DateTime @default(now())
+  @@index([clientId])
+  @@index([propertyId])
+  @@index([createdAt])
+}
+
+model PropertyActivity {
+  id          String   @id @default(cuid())
+  type        ActivityType
+  description String
+  actorType   String?
+  actorId     String?
+  metadata    Json?
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  @@index([propertyId])
+  @@index([type])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  type        NotificationType
+  title       String
+  message     String
+  actionUrl   String?
+  readAt      DateTime?
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id])
+  createdAt   DateTime @default(now())
+  @@index([clientId])
+  @@index([readAt])
 }
 
 model ValuationRequest {
@@ -74,9 +225,10 @@ model ValuationRequest {
   message   String?  @db.Text
   status    RequestStatus @default(PENDING)
   notes     String?  @db.Text
+  clientId  String?
+  client    Client?  @relation(fields: [clientId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
   @@index([status])
   @@index([createdAt])
 }
@@ -88,12 +240,11 @@ model ContactRequest {
   phone      String?
   subject    String?
   message    String   @db.Text
-  propertyId String?  // Optional: if inquiry is about specific property
+  propertyId String?
   status     RequestStatus @default(PENDING)
   notes      String?  @db.Text
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  
   @@index([status])
   @@index([createdAt])
 }
@@ -104,39 +255,27 @@ model AdminUser {
   name      String
   cognitoId String   @unique
   role      AdminRole @default(AGENT)
+  avatar    String?
+  phone     String?
   active    Boolean  @default(true)
+  properties Property[]
+  assignedClients Client[]
+  sentMessages Message[] @relation("SentMessages")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum PropertyType {
-  APARTMENT
-  HOUSE
-  PENTHOUSE
-  STUDIO
-  DUPLEX
-  LOFT
-  COMMERCIAL
-  LAND
-}
-
-enum PropertyStatus {
-  AVAILABLE
-  RESERVED
-  SOLD
-  RENTED
-  OFF_MARKET
-}
-
-enum RequestStatus {
-  PENDING
-  CONTACTED
-  IN_PROGRESS
-  COMPLETED
-  ARCHIVED
-}
-
-enum AdminRole {
-  ADMIN
-  AGENT
-}
+enum PropertyType { APARTMENT HOUSE PENTHOUSE STUDIO DUPLEX LOFT COMMERCIAL LAND }
+enum PropertyStatus { DRAFT PENDING_REVIEW AVAILABLE RESERVED SOLD RENTED OFF_MARKET }
+enum RequestStatus { PENDING CONTACTED IN_PROGRESS COMPLETED ARCHIVED }
+enum AdminRole { SUPER_ADMIN ADMIN AGENT }
+enum ClientType { SELLER BUYER BOTH }
+enum ClientStatus { ACTIVE INACTIVE SUSPENDED }
+enum ClientSource { WEBSITE REFERRAL PORTAL WALK_IN OTHER }
+enum DocumentType { CONTRACT ID_DOCUMENT PROPERTY_DEED ENERGY_CERTIFICATE IBI_RECEIPT COMMUNITY_RULES FLOOR_PLAN VALUATION_REPORT OTHER }
+enum DocumentStatus { PENDING APPROVED REJECTED }
+enum ContractType { EXCLUSIVE_SALE NON_EXCLUSIVE_SALE RENTAL }
+enum ContractStatus { DRAFT PENDING_SIGNATURE ACTIVE EXPIRED CANCELLED COMPLETED }
+enum ValuationStatus { PENDING IN_PROGRESS COMPLETED }
+enum ActivityType { CREATED UPDATED STATUS_CHANGED IMAGE_ADDED IMAGE_REMOVED DOCUMENT_ADDED VISIT_SCHEDULED OFFER_RECEIVED PRICE_CHANGED NOTE_ADDED }
+enum NotificationType { WELCOME PROPERTY_UPDATE DOCUMENT_UPLOADED DOCUMENT_APPROVED DOCUMENT_REJECTED MESSAGE_RECEIVED VISIT_SCHEDULED OFFER_RECEIVED CONTRACT_READY CONTRACT_SIGNED VALUATION_READY }

@@ -22,6 +22,7 @@
     "@emotion/styled": "^11.11.0",
     "@prisma/client": "^5.8.0",
     "amazon-cognito-identity-js": "^6.3.7",
+    "aws-jwt-verify": "^5.1.1",
     "dompurify": "^3.0.8",
     "framer-motion": "^10.18.0",
     "isomorphic-dompurify": "^2.4.0",
