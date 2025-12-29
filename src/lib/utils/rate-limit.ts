@@ -21,7 +21,7 @@ export function checkRateLimit(identifier: string): {
 
   // Clean up old entries periodically
   if (rateLimitMap.size > 10000) {
-    for (const [key, value] of rateLimitMap.entries()) {
+    for (const [key, value] of Array.from(rateLimitMap.entries())) {
       if (now > value.resetTime) {
         rateLimitMap.delete(key)
       }
