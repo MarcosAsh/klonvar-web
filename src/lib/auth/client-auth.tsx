@@ -2,9 +2,12 @@
 
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
-import { User, Session } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js';
 
-const supabase = createClientComponentClient();
+const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 interface ClientUser {
   id: string;
@@ -98,7 +101,6 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
       if (profile) {
         setUser(profile);
       } else {
-        // Create profile if doesn't exist
         await fetch('/api/portal/me', {
           method: 'POST',
           headers: { 
@@ -120,10 +122,7 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
       email: email.toLowerCase(),
       password,
       options: {
-        data: {
-          name,
-          phone,
-        },
+        data: { name, phone },
       },
     });
 
@@ -139,7 +138,6 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
   };
 
   const confirmSignUp = async (_email: string, _code: string): Promise<{ success: boolean; error?: string }> => {
-    // Supabase handles email confirmation via link, not code
     return { success: true };
   };
 
@@ -148,7 +146,6 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
       type: 'signup',
       email: email.toLowerCase(),
     });
-
     if (error) return { success: false, error: error.message };
     return { success: true };
   };
@@ -163,16 +160,12 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase(), {
       redirectTo: `${window.location.origin}/portal/reset-password`,
     });
-
     if (error) return { success: false, error: error.message };
     return { success: true };
   };
 
   const confirmForgotPassword = async (_email: string, _code: string, newPassword: string): Promise<{ success: boolean; error?: string }> => {
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
-
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) return { success: false, error: error.message };
     return { success: true };
   };
@@ -191,18 +184,10 @@ export function ClientAuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <ClientAuthContext.Provider value={{ 
-      user, 
-      isLoading, 
-      isAuthenticated: !!user, 
-      signIn, 
-      signUp, 
-      confirmSignUp, 
-      resendConfirmation, 
-      signOut, 
-      forgotPassword, 
-      confirmForgotPassword, 
-      refreshSession, 
-      getIdToken 
+      user, isLoading, isAuthenticated: !!user, 
+      signIn, signUp, confirmSignUp, resendConfirmation, 
+      signOut, forgotPassword, confirmForgotPassword, 
+      refreshSession, getIdToken 
     }}>
       {children}
     </ClientAuthContext.Provider>
@@ -217,10 +202,8 @@ export function useClientAuth() {
 
 export function useRequireAuth(redirectTo = '/portal/login') {
   const { isAuthenticated, isLoading } = useClientAuth();
-  
   useEffect(() => {
     if (!isLoading && !isAuthenticated) window.location.href = redirectTo;
   }, [isAuthenticated, isLoading, redirectTo]);
-  
   return { isAuthenticated, isLoading };
 }
