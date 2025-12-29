@@ -1,5 +1,6 @@
-export const dynamic = 'force-dynamic';
+'use client';
 
+export const dynamic = 'force-dynamic';
 'use client';
 
 import { Box, Button, Heading, HStack, Icon, SimpleGrid, Text, VStack, Menu, MenuButton, MenuList, MenuItem, IconButton, useToast } from '@chakra-ui/react';
