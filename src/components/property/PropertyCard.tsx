@@ -3,7 +3,8 @@
 import { Box, Flex, Heading, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiBed, FiMaximize, FiDroplet, FiMapPin, FiArrowUpRight } from 'react-icons/fi';
+import { FiMaximize, FiDroplet, FiMapPin, FiArrowUpRight } from 'react-icons/fi';
+import { IoBedOutline } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 import { GlassPill } from '@/components/ui/GlassCard';
 
