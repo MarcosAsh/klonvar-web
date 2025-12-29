@@ -6,12 +6,12 @@ import {
   Flex,
   Grid,
   GridItem,
-  Heading,
   HStack,
   Icon,
   Link as ChakraLink,
   Text,
   VStack,
+  Image,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import {
@@ -37,7 +37,6 @@ const footerLinks = {
   ],
   empresa: [
     { label: 'Sobre nosotros', href: '/nosotros' },
-    { label: 'Opiniones', href: '/opiniones' },
     { label: 'Contacto', href: '/contacto' },
   ],
   legal: [
@@ -103,30 +102,29 @@ export function Footer() {
             {/* Brand Column */}
             <GridItem>
               <VStack align="flex-start" spacing={6}>
-                {/* Glass Logo */}
+                {/* Logo */}
                 <HStack spacing={3}>
-                  <Box
-                    w="48px"
+                  <Image
+                    src="/logo.png"
+                    alt="Klonvar"
                     h="48px"
-                    borderRadius="14px"
-                    bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    position="relative"
-                    overflow="hidden"
-                    boxShadow="0 4px 12px rgba(6, 182, 212, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)"
-                  >
-                    <Text
-                      fontFamily="heading"
-                      fontWeight="700"
-                      fontSize="22px"
-                      color="white"
-                      letterSpacing="-0.02em"
-                    >
-                      K
-                    </Text>
-                  </Box>
+                    filter="brightness(0) invert(1)"
+                    fallback={
+                      <Box
+                        w="48px"
+                        h="48px"
+                        borderRadius="14px"
+                        bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Text fontFamily="heading" fontWeight="700" fontSize="22px" color="white">
+                          K
+                        </Text>
+                      </Box>
+                    }
+                  />
                   <Box>
                     <Text
                       fontFamily="heading"
@@ -157,7 +155,7 @@ export function Footer() {
                   Tu agencia inmobiliaria de confianza en Madrid. Te acompañamos en cada paso.
                 </Text>
 
-                {/* Social Links - Glass Pills */}
+                {/* Social Links */}
                 <HStack spacing={3} pt={2}>
                   {socialLinks.map((social) => (
                     <ChakraLink
@@ -257,7 +255,7 @@ export function Footer() {
               </VStack>
             </GridItem>
 
-            {/* Contact Column - Glass Card */}
+            {/* Contact Column */}
             <GridItem>
               <Box
                 bg="rgba(255, 255, 255, 0.04)"

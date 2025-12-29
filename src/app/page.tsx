@@ -13,10 +13,11 @@ import {
   SimpleGrid,
   Text,
   VStack,
+  Image,
 } from '@chakra-ui/react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import {
   FiArrowRight,
   FiTrendingUp,
@@ -27,6 +28,10 @@ import {
   FiKey,
   FiHome,
   FiCheck,
+  FiBed,
+  FiDroplet,
+  FiMaximize,
+  FiMapPin,
 } from 'react-icons/fi';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassPill } from '@/components/ui/GlassCard';
@@ -35,7 +40,24 @@ const MotionBox = motion(Box);
 const MotionHeading = motion(Heading);
 const MotionText = motion(Text);
 
-// Benefits data
+interface PropertyImage {
+  id: string;
+  url: string;
+}
+
+interface FeaturedProperty {
+  id: string;
+  title: string;
+  price: number;
+  address: string;
+  neighborhood?: string;
+  propertyType: string;
+  bedrooms: number;
+  bathrooms: number;
+  squareMeters: number;
+  images: PropertyImage[];
+}
+
 const benefits = [
   {
     icon: FiTrendingUp,
@@ -69,7 +91,6 @@ const benefits = [
   },
 ];
 
-// Process steps
 const steps = [
   { number: '01', title: 'Valoración', description: 'Análisis del mercado' },
   { number: '02', title: 'Preparación', description: 'Home staging' },
@@ -79,7 +100,6 @@ const steps = [
   { number: '06', title: 'Firma', description: 'Cierre seguro' },
 ];
 
-// Animation variants
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0 },
@@ -112,6 +132,102 @@ function AnimatedSection({ children, delay = 0 }: { children: React.ReactNode; d
   );
 }
 
+const propertyTypeLabels: Record<string, string> = {
+  APARTMENT: 'Piso',
+  HOUSE: 'Casa',
+  PENTHOUSE: 'Ático',
+  STUDIO: 'Estudio',
+  DUPLEX: 'Dúplex',
+  LOFT: 'Loft',
+  COMMERCIAL: 'Local',
+  LAND: 'Terreno',
+};
+
+function FeaturedPropertyCard({ property }: { property: FeaturedProperty }) {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  return (
+    <Link href={`/propiedades/${property.id}`}>
+      <GlassCard variant="elevated" p={0} overflow="hidden" h="100%">
+        <Box position="relative" h="200px" overflow="hidden">
+          {property.images[0] ? (
+            <Image
+              src={property.images[0].url}
+              alt={property.title}
+              w="100%"
+              h="100%"
+              objectFit="cover"
+            />
+          ) : (
+            <Flex
+              w="100%"
+              h="100%"
+              bg="linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%)"
+              align="center"
+              justify="center"
+            >
+              <Icon as={FiHome} boxSize={12} color="whiteAlpha.200" />
+            </Flex>
+          )}
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            bgGradient="linear(180deg, transparent 50%, rgba(0,0,0,0.4) 100%)"
+          />
+          <GlassPill
+            position="absolute"
+            top={4}
+            left={4}
+            colorScheme="teal"
+          >
+            {propertyTypeLabels[property.propertyType]}
+          </GlassPill>
+        </Box>
+        <VStack align="stretch" p={5} spacing={3}>
+          <Text
+            fontFamily="heading"
+            fontSize="24px"
+            fontWeight="600"
+            color="brand.charcoal.900"
+          >
+            {formatPrice(property.price)}
+          </Text>
+          <Text fontWeight="500" color="brand.charcoal.800" noOfLines={1}>
+            {property.title}
+          </Text>
+          <HStack spacing={2} color="brand.charcoal.500" fontSize="sm">
+            <Icon as={FiMapPin} boxSize={4} />
+            <Text noOfLines={1}>{property.neighborhood || property.address}</Text>
+          </HStack>
+          <HStack spacing={4} pt={2} fontSize="sm" color="brand.charcoal.600">
+            <HStack spacing={1}>
+              <Icon as={FiBed} />
+              <Text>{property.bedrooms}</Text>
+            </HStack>
+            <HStack spacing={1}>
+              <Icon as={FiDroplet} />
+              <Text>{property.bathrooms}</Text>
+            </HStack>
+            <HStack spacing={1}>
+              <Icon as={FiMaximize} />
+              <Text>{property.squareMeters} m²</Text>
+            </HStack>
+          </HStack>
+        </VStack>
+      </GlassCard>
+    </Link>
+  );
+}
+
 export default function HomePage() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -121,6 +237,23 @@ export default function HomePage() {
 
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  const [featuredProperties, setFeaturedProperties] = useState<FeaturedProperty[]>([]);
+
+  useEffect(() => {
+    async function fetchFeatured() {
+      try {
+        const res = await fetch('/api/properties/featured');
+        if (res.ok) {
+          const data = await res.json();
+          setFeaturedProperties(data.properties || []);
+        }
+      } catch (error) {
+        console.error('Error fetching featured properties:', error);
+      }
+    }
+    fetchFeatured();
+  }, []);
 
   return (
     <Box bg="#fafafa" minH="100vh">
@@ -146,7 +279,6 @@ export default function HomePage() {
           overflow="hidden"
           pointerEvents="none"
         >
-          {/* Teal gradient orb */}
           <MotionBox
             position="absolute"
             top="-20%"
@@ -168,7 +300,6 @@ export default function HomePage() {
               ease: 'easeInOut',
             }}
           />
-          {/* Amber gradient orb */}
           <MotionBox
             position="absolute"
             bottom="-30%"
@@ -202,11 +333,8 @@ export default function HomePage() {
           >
             {/* Hero Content */}
             <GridItem>
-              <MotionBox
-                style={{ y: heroY, opacity: heroOpacity }}
-              >
+              <MotionBox style={{ y: heroY, opacity: heroOpacity }}>
                 <VStack align="flex-start" spacing={6}>
-                  {/* Eyebrow */}
                   <MotionBox
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -220,7 +348,6 @@ export default function HomePage() {
                     </GlassPill>
                   </MotionBox>
 
-                  {/* Main Headline */}
                   <MotionHeading
                     as="h1"
                     textStyle="heroTitle"
@@ -238,7 +365,6 @@ export default function HomePage() {
                     </Text>
                   </MotionHeading>
 
-                  {/* Subtitle */}
                   <MotionText
                     textStyle="subtitle"
                     maxW="480px"
@@ -249,7 +375,6 @@ export default function HomePage() {
                     Te acompañamos de principio a fin para que consigas el mejor resultado, sin estrés y con total transparencia.
                   </MotionText>
 
-                  {/* CTA Buttons */}
                   <MotionBox
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -269,14 +394,13 @@ export default function HomePage() {
                     </HStack>
                   </MotionBox>
 
-                  {/* Trust indicators */}
                   <MotionBox
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.6, delay: 0.5 }}
                     pt={6}
                   >
-                    <HStack spacing={6} color="brand.charcoal.500" fontSize="14px">
+                    <HStack spacing={6} color="brand.charcoal.500" fontSize="14px" flexWrap="wrap">
                       {['Sin comisiones ocultas', '+100 ventas cerradas', 'Valoración en 24h'].map((text) => (
                         <HStack key={text} spacing={2}>
                           <Icon as={FiCheck} color="brand.glass.500" />
@@ -289,7 +413,7 @@ export default function HomePage() {
               </MotionBox>
             </GridItem>
 
-            {/* Hero Visual - Floating Glass Cards */}
+            {/* Hero Visual */}
             <GridItem display={{ base: 'none', lg: 'block' }}>
               <MotionBox
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -298,7 +422,6 @@ export default function HomePage() {
                 position="relative"
                 h="500px"
               >
-                {/* Main Property Card */}
                 <GlassCard
                   variant="elevated"
                   position="absolute"
@@ -318,12 +441,7 @@ export default function HomePage() {
                       boxSize={16}
                       color="whiteAlpha.200"
                     />
-                    <GlassPill
-                      colorScheme="teal"
-                      position="absolute"
-                      top={4}
-                      left={4}
-                    >
+                    <GlassPill colorScheme="teal" position="absolute" top={4} left={4}>
                       Destacado
                     </GlassPill>
                   </Box>
@@ -344,7 +462,6 @@ export default function HomePage() {
                   </Box>
                 </GlassCard>
 
-                {/* Stats Card */}
                 <GlassCard
                   variant="accent"
                   position="absolute"
@@ -363,19 +480,12 @@ export default function HomePage() {
                   </VStack>
                 </GlassCard>
 
-                {/* Small floating element */}
                 <MotionBox
                   position="absolute"
                   top="60%"
                   left="0"
-                  animate={{
-                    y: [0, -10, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                 >
                   <GlassCard variant="default" p={4} w="140px">
                     <HStack>
@@ -413,15 +523,39 @@ export default function HomePage() {
             justifyContent="center"
             pt={2}
           >
-            <Box
-              w="4px"
-              h="8px"
-              borderRadius="2px"
-              bg="brand.charcoal.300"
-            />
+            <Box w="4px" h="8px" borderRadius="2px" bg="brand.charcoal.300" />
           </Box>
         </MotionBox>
       </Box>
+
+      {/* Featured Properties Section */}
+      {featuredProperties.length > 0 && (
+        <Box as="section" py={{ base: 20, md: 32 }} bg="rgba(0, 0, 0, 0.02)">
+          <Container maxW="container.xl">
+            <AnimatedSection>
+              <HStack justify="space-between" align="flex-end" mb={12} flexWrap="wrap" gap={4}>
+                <VStack align="flex-start" spacing={2}>
+                  <Text textStyle="eyebrow">Propiedades destacadas</Text>
+                  <Heading textStyle="sectionTitle">Encuentra tu próximo hogar</Heading>
+                </VStack>
+                <Link href="/propiedades">
+                  <Button variant="secondary" rightIcon={<FiArrowRight />}>
+                    Ver todas
+                  </Button>
+                </Link>
+              </HStack>
+            </AnimatedSection>
+
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+              {featuredProperties.map((property, index) => (
+                <AnimatedSection key={property.id} delay={index * 0.1}>
+                  <FeaturedPropertyCard property={property} />
+                </AnimatedSection>
+              ))}
+            </SimpleGrid>
+          </Container>
+        </Box>
+      )}
 
       {/* Benefits Section */}
       <Box as="section" py={{ base: 20, md: 32 }} position="relative">
@@ -490,13 +624,7 @@ export default function HomePage() {
       </Box>
 
       {/* Process Section - Dark Theme */}
-      <Box
-        as="section"
-        py={{ base: 20, md: 32 }}
-        position="relative"
-        overflow="hidden"
-      >
-        {/* Dark glass background */}
+      <Box as="section" py={{ base: 20, md: 32 }} position="relative" overflow="hidden">
         <Box
           position="absolute"
           top={0}
@@ -560,13 +688,7 @@ export default function HomePage() {
       </Box>
 
       {/* CTA Section */}
-      <Box
-        as="section"
-        py={{ base: 20, md: 32 }}
-        position="relative"
-        overflow="hidden"
-      >
-        {/* Gradient background */}
+      <Box as="section" py={{ base: 20, md: 32 }} position="relative" overflow="hidden">
         <Box
           position="absolute"
           top={0}

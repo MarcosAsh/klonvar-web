@@ -16,8 +16,9 @@ import {
   DrawerBody,
   Link as ChakraLink,
   Text,
+  Image,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
@@ -39,7 +40,6 @@ export function Header() {
   const pathname = usePathname();
   const { scrollY } = useScroll();
 
-  // Smooth transforms for glass effect
   const headerBg = useTransform(
     scrollY,
     [0, 50],
@@ -90,39 +90,26 @@ export function Header() {
                 _hover={{ opacity: 0.8, textDecoration: 'none' }}
                 transition="opacity 0.2s ease"
               >
-                {/* Liquid Glass Logo Mark */}
-                <Box
-                  w="40px"
+                <Image
+                  src="/logo.png"
+                  alt="Klonvar"
                   h="40px"
-                  borderRadius="12px"
-                  bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  position="relative"
-                  overflow="hidden"
-                  boxShadow="0 4px 12px rgba(6, 182, 212, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4)"
-                  _before={{
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: '50%',
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%)',
-                    borderRadius: '12px 12px 0 0',
-                  }}
-                >
-                  <Text
-                    fontFamily="heading"
-                    fontWeight="700"
-                    fontSize="18px"
-                    color="white"
-                    letterSpacing="-0.02em"
-                  >
-                    K
-                  </Text>
-                </Box>
+                  fallback={
+                    <Box
+                      w="40px"
+                      h="40px"
+                      borderRadius="12px"
+                      bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Text fontFamily="heading" fontWeight="700" fontSize="18px" color="white">
+                        K
+                      </Text>
+                    </Box>
+                  }
+                />
                 <Text
                   fontFamily="heading"
                   fontWeight="600"
@@ -136,7 +123,7 @@ export function Header() {
               </ChakraLink>
             </Link>
 
-            {/* Desktop Navigation - Floating Glass Pill */}
+            {/* Desktop Navigation */}
             <MotionFlex
               as="nav"
               display={{ base: 'none', lg: 'flex' }}
@@ -201,7 +188,7 @@ export function Header() {
         </Container>
       </MotionBox>
 
-      {/* Mobile Navigation Drawer - Glass Style */}
+      {/* Mobile Navigation Drawer */}
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="full">
         <DrawerOverlay bg="rgba(250, 250, 250, 0.8)" backdropFilter="blur(20px)" />
         <DrawerContent bg="transparent" boxShadow="none">

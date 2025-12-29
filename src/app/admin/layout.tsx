@@ -20,6 +20,7 @@ import {
   DrawerCloseButton,
   DrawerBody,
   IconButton,
+  Image,
 } from '@chakra-ui/react';
 import { FiHome, FiGrid, FiUsers, FiFileText, FiMail, FiSettings, FiLogOut, FiMenu, FiChevronDown } from 'react-icons/fi';
 import Link from 'next/link';
@@ -128,18 +129,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         overflowY="auto"
       >
         <Flex align="center" h="16" px={6} borderBottom="1px solid" borderColor="gray.100">
-          <Box
-            w="36px"
+          <Image
+            src="/logo.png"
+            alt="Klonvar"
             h="36px"
-            borderRadius="10px"
-            bg="linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
             mr={3}
-          >
-            <Text fontWeight="700" fontSize="16px" color="white">K</Text>
-          </Box>
+            fallback={
+              <Box
+                w="36px"
+                h="36px"
+                borderRadius="10px"
+                bg="linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text fontWeight="700" fontSize="16px" color="white">K</Text>
+              </Box>
+            }
+          />
           <Text fontWeight="600" fontSize="lg" color="gray.800">Klonvar Admin</Text>
         </Flex>
         <Sidebar />
@@ -184,7 +192,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </HStack>
             </MenuButton>
             <MenuList>
-              <MenuItem icon={<FiSettings />}>Configuración</MenuItem>
+              <Link href="/admin/settings">
+                <MenuItem icon={<FiSettings />}>Configuración</MenuItem>
+              </Link>
               <MenuItem icon={<FiLogOut />} onClick={handleLogout}>Cerrar sesión</MenuItem>
             </MenuList>
           </Menu>
