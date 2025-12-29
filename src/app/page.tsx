@@ -154,7 +154,7 @@ function FeaturedPropertyCard({ property }: { property: FeaturedProperty }) {
 
   return (
     <Link href={`/propiedades/${property.id}`}>
-      <GlassCard variant="elevated" p={0} overflow="hidden" h="100%">
+      <GlassCard variant="elevated" p={0} overflow="hidden" h="100%" cursor="pointer">
         <Box position="relative" h="200px" overflow="hidden">
           {property.images[0] ? (
             <Image

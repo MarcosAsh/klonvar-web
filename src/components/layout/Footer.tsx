@@ -8,7 +8,6 @@ import {
   GridItem,
   HStack,
   Icon,
-  Link as ChakraLink,
   Text,
   VStack,
   Image,
@@ -158,11 +157,12 @@ export function Footer() {
                 {/* Social Links */}
                 <HStack spacing={3} pt={2}>
                   {socialLinks.map((social) => (
-                    <ChakraLink
+                    <a
                       key={social.label}
                       href={social.href}
                       aria-label={social.label}
-                      isExternal
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <MotionBox
                         w="44px"
@@ -175,6 +175,7 @@ export function Footer() {
                         alignItems="center"
                         justifyContent="center"
                         transition="all 0.3s ease"
+                        cursor="pointer"
                         _hover={{
                           bg: 'rgba(255, 255, 255, 0.1)',
                           transform: 'translateY(-2px)',
@@ -184,7 +185,7 @@ export function Footer() {
                       >
                         <Icon as={social.icon} boxSize={5} color="whiteAlpha.800" />
                       </MotionBox>
-                    </ChakraLink>
+                    </a>
                   ))}
                 </HStack>
               </VStack>
@@ -203,22 +204,19 @@ export function Footer() {
                   Servicios
                 </Text>
                 {footerLinks.servicios.map((link) => (
-                  <Link key={link.href} href={link.href} passHref>
-                    <ChakraLink
+                  <Link key={link.href} href={link.href}>
+                    <Text
                       color="whiteAlpha.700"
                       fontSize="15px"
-                      display="flex"
-                      alignItems="center"
-                      gap={1}
                       transition="all 0.2s ease"
+                      cursor="pointer"
                       _hover={{
                         color: 'white',
-                        textDecoration: 'none',
                         transform: 'translateX(4px)',
                       }}
                     >
                       {link.label}
-                    </ChakraLink>
+                    </Text>
                   </Link>
                 ))}
               </VStack>
@@ -237,19 +235,19 @@ export function Footer() {
                   Empresa
                 </Text>
                 {footerLinks.empresa.map((link) => (
-                  <Link key={link.href} href={link.href} passHref>
-                    <ChakraLink
+                  <Link key={link.href} href={link.href}>
+                    <Text
                       color="whiteAlpha.700"
                       fontSize="15px"
                       transition="all 0.2s ease"
+                      cursor="pointer"
                       _hover={{
                         color: 'white',
-                        textDecoration: 'none',
                         transform: 'translateX(4px)',
                       }}
                     >
                       {link.label}
-                    </ChakraLink>
+                    </Text>
                   </Link>
                 ))}
               </VStack>
@@ -287,14 +285,16 @@ export function Footer() {
                     >
                       <Icon as={FiPhone} boxSize={4} color="brand.glass.400" />
                     </Box>
-                    <ChakraLink
-                      href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}
-                      color="whiteAlpha.800"
-                      fontSize="15px"
-                      _hover={{ color: 'white' }}
-                    >
-                      {contactInfo.phone}
-                    </ChakraLink>
+                    <a href={`tel:${contactInfo.phone.replace(/\s/g, '')}`}>
+                      <Text
+                        color="whiteAlpha.800"
+                        fontSize="15px"
+                        _hover={{ color: 'white' }}
+                        cursor="pointer"
+                      >
+                        {contactInfo.phone}
+                      </Text>
+                    </a>
                   </HStack>
 
                   <HStack spacing={3}>
@@ -309,19 +309,21 @@ export function Footer() {
                     >
                       <Icon as={FaWhatsapp} boxSize={4} color="brand.glass.400" />
                     </Box>
-                    <ChakraLink
+                    <a
                       href={`https://wa.me/${contactInfo.whatsapp}`}
-                      isExternal
-                      color="whiteAlpha.800"
-                      fontSize="15px"
-                      display="flex"
-                      alignItems="center"
-                      gap={1}
-                      _hover={{ color: 'white' }}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      WhatsApp
-                      <Icon as={FiArrowUpRight} boxSize={3} />
-                    </ChakraLink>
+                      <HStack
+                        color="whiteAlpha.800"
+                        fontSize="15px"
+                        _hover={{ color: 'white' }}
+                        cursor="pointer"
+                      >
+                        <Text>WhatsApp</Text>
+                        <Icon as={FiArrowUpRight} boxSize={3} />
+                      </HStack>
+                    </a>
                   </HStack>
 
                   <HStack spacing={3}>
@@ -336,14 +338,16 @@ export function Footer() {
                     >
                       <Icon as={FiMail} boxSize={4} color="brand.glass.400" />
                     </Box>
-                    <ChakraLink
-                      href={`mailto:${contactInfo.email}`}
-                      color="whiteAlpha.800"
-                      fontSize="15px"
-                      _hover={{ color: 'white' }}
-                    >
-                      {contactInfo.email}
-                    </ChakraLink>
+                    <a href={`mailto:${contactInfo.email}`}>
+                      <Text
+                        color="whiteAlpha.800"
+                        fontSize="15px"
+                        _hover={{ color: 'white' }}
+                        cursor="pointer"
+                      >
+                        {contactInfo.email}
+                      </Text>
+                    </a>
                   </HStack>
 
                   <HStack spacing={3} align="flex-start">
@@ -390,14 +394,15 @@ export function Footer() {
             </Text>
             <HStack spacing={6}>
               {footerLinks.legal.map((link) => (
-                <Link key={link.href} href={link.href} passHref>
-                  <ChakraLink
+                <Link key={link.href} href={link.href}>
+                  <Text
                     color="whiteAlpha.500"
                     fontSize="13px"
+                    cursor="pointer"
                     _hover={{ color: 'whiteAlpha.800' }}
                   >
                     {link.label}
-                  </ChakraLink>
+                  </Text>
                 </Link>
               ))}
             </HStack>

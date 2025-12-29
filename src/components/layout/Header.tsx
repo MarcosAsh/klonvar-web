@@ -14,14 +14,13 @@ import {
   DrawerContent,
   DrawerCloseButton,
   DrawerBody,
-  Link as ChakraLink,
   Text,
   Image,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
@@ -38,25 +37,6 @@ const navLinks = [
 export function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const pathname = usePathname();
-  const { scrollY } = useScroll();
-
-  const headerBg = useTransform(
-    scrollY,
-    [0, 50],
-    ['rgba(250, 250, 250, 0)', 'rgba(250, 250, 250, 0.72)']
-  );
-
-  const headerBlur = useTransform(
-    scrollY,
-    [0, 50],
-    ['blur(0px)', 'blur(20px)']
-  );
-
-  const headerBorder = useTransform(
-    scrollY,
-    [0, 50],
-    ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.04)']
-  );
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -72,23 +52,20 @@ export function Header() {
         left={0}
         right={0}
         zIndex={100}
-        style={{
-          backgroundColor: headerBg as unknown as string,
-          backdropFilter: headerBlur as unknown as string,
-          WebkitBackdropFilter: headerBlur as unknown as string,
-          borderBottom: `1px solid ${headerBorder}`,
-        }}
+        bg="rgba(250, 250, 250, 0.72)"
+        backdropFilter="blur(20px)"
+        borderBottom="1px solid rgba(0, 0, 0, 0.04)"
       >
         <Container maxW="container.xl" py={4}>
           <Flex justify="space-between" align="center">
             {/* Logo */}
-            <Link href="/" passHref>
-              <ChakraLink
-                display="flex"
-                alignItems="center"
+            <Link href="/">
+              <Flex
+                align="center"
                 gap={2}
-                _hover={{ opacity: 0.8, textDecoration: 'none' }}
+                _hover={{ opacity: 0.8 }}
                 transition="opacity 0.2s ease"
+                cursor="pointer"
               >
                 <Image
                   src="/logo.png"
@@ -120,7 +97,7 @@ export function Header() {
                 >
                   Klonvar
                 </Text>
-              </ChakraLink>
+              </Flex>
             </Link>
 
             {/* Desktop Navigation */}
@@ -137,8 +114,8 @@ export function Header() {
               gap={1}
             >
               {navLinks.map((link) => (
-                <Link key={link.href} href={link.href} passHref>
-                  <ChakraLink
+                <Link key={link.href} href={link.href}>
+                  <Box
                     px={4}
                     py={2}
                     borderRadius="980px"
@@ -147,23 +124,22 @@ export function Header() {
                     color={isActive(link.href) ? 'brand.charcoal.900' : 'brand.charcoal.600'}
                     bg={isActive(link.href) ? 'rgba(0, 0, 0, 0.04)' : 'transparent'}
                     transition="all 0.2s ease"
+                    cursor="pointer"
                     _hover={{
                       bg: 'rgba(0, 0, 0, 0.04)',
                       color: 'brand.charcoal.900',
-                      textDecoration: 'none',
                     }}
                   >
                     {link.label}
-                  </ChakraLink>
+                  </Box>
                 </Link>
               ))}
             </MotionFlex>
 
             {/* CTA Button */}
             <HStack spacing={3}>
-              <Link href="/valoracion" passHref>
+              <Link href="/valoracion">
                 <Button
-                  as="a"
                   variant="primary"
                   size="md"
                   display={{ base: 'none', md: 'flex' }}
@@ -217,10 +193,8 @@ export function Header() {
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <Link href={link.href} passHref>
-                      <ChakraLink
-                        onClick={onClose}
-                        display="block"
+                    <Link href={link.href} onClick={onClose}>
+                      <Box
                         py={3}
                         px={8}
                         fontSize="28px"
@@ -230,13 +204,13 @@ export function Header() {
                         letterSpacing="-0.02em"
                         textAlign="center"
                         transition="all 0.2s ease"
+                        cursor="pointer"
                         _hover={{
                           color: 'brand.glass.600',
-                          textDecoration: 'none',
                         }}
                       >
                         {link.label}
-                      </ChakraLink>
+                      </Box>
                     </Link>
                   </MotionBox>
                 ))}
@@ -247,13 +221,8 @@ export function Header() {
                 transition={{ delay: navLinks.length * 0.05 }}
                 pt={6}
               >
-                <Link href="/valoracion" passHref>
-                  <Button
-                    as="a"
-                    variant="primary"
-                    size="xl"
-                    onClick={onClose}
-                  >
+                <Link href="/valoracion" onClick={onClose}>
+                  <Button variant="primary" size="xl">
                     Valoración Gratuita
                   </Button>
                 </Link>
