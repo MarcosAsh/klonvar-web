@@ -26,7 +26,6 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
   FiArrowLeft,
-  FiBed,
   FiDroplet,
   FiMaximize,
   FiMapPin,
@@ -37,6 +36,7 @@ import {
   FiMail,
   FiCheck,
 } from 'react-icons/fi';
+import { IoBedOutline } from 'react-icons/io5';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassPill } from '@/components/ui/GlassCard';
@@ -343,7 +343,7 @@ export default function PropertyDetailPage() {
                     borderRadius="16px"
                     spacing={1}
                   >
-                    <Icon as={FiBed} boxSize={6} color="brand.glass.600" />
+                    <Icon as={IoBedOutline} boxSize={6} color="brand.glass.600" />
                     <Text fontWeight="700" fontSize="xl">
                       {property.bedrooms}
                     </Text>

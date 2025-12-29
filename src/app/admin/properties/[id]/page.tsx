@@ -25,7 +25,6 @@ import {
   FiArrowLeft,
   FiEdit,
   FiTrash2,
-  FiBed,
   FiDroplet,
   FiMaximize,
   FiMapPin,
@@ -33,6 +32,7 @@ import {
   FiCheck,
   FiX,
 } from 'react-icons/fi';
+import { IoBedOutline } from 'react-icons/io5';
 
 const statusColors: Record<string, string> = {
   DRAFT: 'gray',
@@ -200,7 +200,7 @@ export default function AdminPropertyViewPage() {
             </Text>
             <SimpleGrid columns={3} spacing={4} mb={6}>
               <VStack p={3} bg="gray.50" borderRadius="lg">
-                <Icon as={FiBed} boxSize={5} color="gray.500" />
+                <Icon as={IoBedOutline} boxSize={5} color="gray.500" />
                 <Text fontWeight="600">{property.bedrooms}</Text>
                 <Text fontSize="xs" color="gray.500">Hab.</Text>
               </VStack>

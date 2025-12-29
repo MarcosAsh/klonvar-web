@@ -28,11 +28,11 @@ import {
   FiKey,
   FiHome,
   FiCheck,
-  FiBed,
   FiDroplet,
   FiMaximize,
   FiMapPin,
 } from 'react-icons/fi';
+import { IoBedOutline } from 'react-icons/io5';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassPill } from '@/components/ui/GlassCard';
 
@@ -210,7 +210,7 @@ function FeaturedPropertyCard({ property }: { property: FeaturedProperty }) {
           </HStack>
           <HStack spacing={4} pt={2} fontSize="sm" color="brand.charcoal.600">
             <HStack spacing={1}>
-              <Icon as={FiBed} />
+              <Icon as={IoBedOutline} />
               <Text>{property.bedrooms}</Text>
             </HStack>
             <HStack spacing={1}>
