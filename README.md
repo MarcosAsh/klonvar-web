@@ -1,193 +1,155 @@
-# Klonvar Inmobiliaria - Liquid Glass Edition
+# Klonvar Inmobiliaria
 
-A stunning, Apple-inspired real estate website built with Next.js 14, Chakra UI, and modern liquid glass design aesthetics.
+Real estate platform built with Next.js 14, Supabase, and Prisma.
 
-## ✨ Design Philosophy
+## Tech Stack
 
-This redesign embraces Apple's **Liquid Glass** design language introduced at WWDC 2025:
+- **Framework**: Next.js 14 (App Router)
+- **Database**: PostgreSQL (Supabase)
+- **Auth**: Supabase Auth
+- **Storage**: Supabase Storage
+- **Email**: Resend
+- **ORM**: Prisma
+- **UI**: Chakra UI + Framer Motion
 
-- **Glassmorphism 2.0**: Translucent surfaces with backdrop blur, saturation, and subtle light reflections
-- **Organic Motion**: Smooth, physics-based animations with Framer Motion
-- **Typography**: Clean system fonts (-apple-system stack) with careful letter-spacing
-- **Color Palette**: Refined teal accents with warm amber highlights on neutral stone backgrounds
-- **Depth & Layering**: Multi-layer glass effects with inset highlights and soft shadows
+## Setup
 
-## 🎨 Key Visual Features
-
-### Glass Card System
-```tsx
-<GlassCard variant="default" />  // Standard frosted glass
-<GlassCard variant="elevated" /> // More prominent, higher blur
-<GlassCard variant="subtle" />   // Lighter, background elements
-<GlassCard variant="dark" />     // Dark mode glass
-<GlassCard variant="accent" />   // Gradient tint glass
-```
-
-### Animated Background Orbs
-Floating gradient spheres with subtle animations create depth and visual interest.
-
-### Floating Navigation
-Pill-shaped navigation bar with glass effect that adapts on scroll.
-
-### Premium Interactions
-- Scale transforms on hover
-- Smooth state transitions
-- Staggered reveal animations
-- Parallax scroll effects
-
-## 🛠 Tech Stack
-
-- **Frontend**: Next.js 14 (App Router), React 18, Chakra UI, Framer Motion
-- **Backend**: Next.js API Routes, Prisma ORM
-- **Database**: PostgreSQL (AWS RDS)
-- **Storage**: AWS S3
-- **Email**: AWS SES
-- **Auth**: AWS Cognito
-- **Validation**: Zod + DOMPurify
-
-## 📁 Project Structure
-
-```
-klonvar-app/
-├── prisma/
-│   └── schema.prisma
-├── public/
-├── src/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── contact/
-│   │   │   ├── properties/
-│   │   │   └── valuation/
-│   │   ├── comprar/
-│   │   ├── contacto/
-│   │   ├── nosotros/
-│   │   ├── propiedades/
-│   │   ├── valoracion/
-│   │   ├── vender/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   └── providers.tsx
-│   ├── components/
-│   │   ├── layout/
-│   │   │   ├── Header.tsx      # Floating glass navigation
-│   │   │   └── Footer.tsx      # Dark theme footer
-│   │   ├── property/
-│   │   │   └── PropertyCard.tsx
-│   │   └── ui/
-│   │       └── GlassCard.tsx   # Reusable glass components
-│   ├── lib/
-│   │   ├── aws/
-│   │   ├── db/
-│   │   ├── utils/
-│   │   └── validation/
-│   └── styles/
-│       └── theme.ts            # Liquid glass theme config
-├── package.json
-└── README.md
-```
-
-## 🚀 Getting Started
-
-### 1. Install Dependencies
+### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Configure Environment Variables
+### 2. Configure Supabase
 
-Create `.env.local`:
+1. Go to [supabase.com](https://supabase.com) and create a project
+2. Get your credentials from Settings > API:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+3. Get your database connection string from Settings > Database
 
-```env
-DATABASE_URL="postgresql://..."
-AWS_REGION="eu-west-1"
-AWS_ACCESS_KEY_ID="..."
-AWS_SECRET_ACCESS_KEY="..."
-AWS_S3_BUCKET="klonvar-property-images"
-AWS_SES_FROM_EMAIL="info@klonvar.com"
-NOTIFICATION_EMAIL="info@klonvar.com"
-```
+### 3. Configure Supabase Storage
 
-### 3. Set Up Database
+1. Go to Storage in your Supabase dashboard
+2. Create a new bucket called `property-images`
+3. Set the bucket to **public** (or configure RLS policies)
+4. Add these policies:
+   - Allow authenticated users to upload
+   - Allow public read access
+
+### 4. Configure Supabase Auth
+
+1. Go to Authentication > Providers
+2. Enable Email provider
+3. Configure email templates (optional)
+4. Set Site URL in Authentication > URL Configuration
+
+### 5. Configure Resend
+
+1. Go to [resend.com](https://resend.com) and create an account
+2. Get your API key
+3. (Optional) Verify a domain for production emails
+
+### 6. Set up environment variables
+
+Copy `.env.example` to `.env.local` and fill in your values:
 
 ```bash
-npx prisma generate
-npx prisma migrate dev
+cp .env.example .env.local
 ```
 
-### 4. Run Development Server
+Required variables:
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+DATABASE_URL=postgresql://postgres:password@db.your-project.supabase.co:5432/postgres
+RESEND_API_KEY=re_xxxxx
+RESEND_FROM_EMAIL=onboarding@resend.dev
+NOTIFICATION_EMAIL=your-email@example.com
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### 7. Set up the database
+
+```bash
+# Generate Prisma client
+npx prisma generate
+
+# Push schema to database
+npx prisma db push
+
+# (Optional) Open Prisma Studio
+npx prisma studio
+```
+
+### 8. Run the development server
 
 ```bash
 npm run dev
 ```
 
-## 🎨 Customizing the Theme
+Open [http://localhost:3000](http://localhost:3000)
 
-### Colors
+## Project Structure
 
-Edit `src/styles/theme.ts`:
-
-```ts
-colors: {
-  brand: {
-    charcoal: { ... },  // Primary dark tones
-    stone: { ... },     // Background neutrals
-    glass: { ... },     // Teal accent (main brand)
-    accent: { ... },    // Warm amber highlights
-  }
-}
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   │   ├── contact/       # Contact form
+│   │   ├── valuation/     # Valuation requests
+│   │   ├── properties/    # Public properties
+│   │   └── portal/        # Authenticated client APIs
+│   ├── portal/            # Client portal pages
+│   └── (public pages)     # Marketing pages
+├── components/
+│   ├── layout/            # Header, Footer
+│   ├── portal/            # Portal-specific components
+│   ├── property/          # Property cards, etc.
+│   └── ui/                # GlassCard, etc.
+├── lib/
+│   ├── auth/              # Auth hooks and context
+│   ├── db/                # Prisma client
+│   ├── email/             # Resend email functions
+│   ├── storage/           # Supabase Storage helpers
+│   ├── supabase/          # Supabase clients
+│   ├── utils/             # Rate limiting, etc.
+│   └── validation/        # Zod schemas
+└── styles/                # Chakra theme
 ```
 
-### Glass Effects
+## Features
 
-Adjust in the theme's `layerStyles`:
+### Public
+- Home, About, Contact pages
+- Property listings with filters
+- Valuation request form
+- Contact form
 
-```ts
-glassCard: {
-  bg: 'rgba(255, 255, 255, 0.72)',
-  backdropFilter: 'blur(20px) saturate(180%)',
-  border: '1px solid rgba(255, 255, 255, 0.22)',
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
-}
-```
+### Client Portal
+- User registration and login
+- Property management
+- Image uploads
+- Document management
+- Messaging
 
-## 📱 Pages
+## Deployment
 
-| Page | Route | Description |
-|------|-------|-------------|
-| Home | `/` | Hero with floating cards, benefits, process |
-| Vender | `/vender` | Sell services with dark hero |
-| Comprar | `/comprar` | Buy services with amber accents |
-| Propiedades | `/propiedades` | Property grid with glass filters |
-| Valoración | `/valoracion` | Valuation form with glass card |
-| Nosotros | `/nosotros` | About page with values |
-| Contacto | `/contacto` | Contact form with info cards |
+### Vercel (Recommended)
 
-## 🔮 Design Patterns Used
+1. Push to GitHub
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy
 
-### 1. Floating Glass Navigation
-Navigation morphs from transparent to frosted glass on scroll.
+### Environment Variables for Production
 
-### 2. Gradient Orb Backgrounds
-Animated radial gradients create depth without cluttering the UI.
+Update these for production:
+- `NEXT_PUBLIC_APP_URL` - Your production URL
+- `RESEND_FROM_EMAIL` - Your verified domain email
 
-### 3. Glass Card Hierarchy
-Different glass variants establish visual hierarchy:
-- `elevated`: Primary content (forms, featured items)
-- `default`: Secondary content (cards, listings)
-- `subtle`: Background elements (filter bars)
-- `dark`: Dark sections (footers, CTAs)
-
-### 4. Pill-shaped Elements
-Apple-style rounded buttons and pills (border-radius: 980px).
-
-### 5. Inset Highlights
-`inset 0 1px 0 rgba(255, 255, 255, 0.6)` creates a subtle top highlight simulating light reflection.
-
-## 📄 License
+## License
 
 Private - Klonvar Invest S.L.
-
----
-
-Built with ❤️ and liquid glass aesthetics

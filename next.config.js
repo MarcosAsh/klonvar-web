@@ -4,18 +4,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.s3.amazonaws.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.s3.*.amazonaws.com',
+        hostname: '*.supabase.co',
       },
     ],
-  },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '10mb',
-    },
   },
 }
 

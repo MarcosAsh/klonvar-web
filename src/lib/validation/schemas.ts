@@ -1,28 +1,28 @@
-import { z } from 'zod';
-import DOMPurify from 'isomorphic-dompurify';
+import { z } from 'zod'
+import DOMPurify from 'isomorphic-dompurify'
 
 // Sanitization helper
 const sanitizeString = (str: string): string => {
-  return DOMPurify.sanitize(str.trim(), { ALLOWED_TAGS: [] });
-};
+  return DOMPurify.sanitize(str.trim(), { ALLOWED_TAGS: [] })
+}
 
 // Custom sanitized string type
-const sanitizedString = z.string().transform(sanitizeString);
+const sanitizedString = z.string().transform(sanitizeString)
 
 // Phone validation (Spanish format)
-const phoneRegex = /^(\+34)?[6-9]\d{8}$/;
+const phoneRegex = /^(\+34)?[6-9]\d{8}$/
 
 // Email validation
 const emailSchema = z
   .string()
   .email('Email inválido')
-  .transform((email) => sanitizeString(email.toLowerCase()));
+  .transform((email) => sanitizeString(email.toLowerCase()))
 
 // Phone validation
 const phoneSchema = z
   .string()
   .regex(phoneRegex, 'Teléfono inválido. Usa formato español: 612345678')
-  .transform(sanitizeString);
+  .transform(sanitizeString)
 
 // Valuation request schema
 export const valuationRequestSchema = z.object({
@@ -37,7 +37,7 @@ export const valuationRequestSchema = z.object({
   message: sanitizedString
     .pipe(z.string().max(1000, 'El mensaje es demasiado largo'))
     .optional(),
-});
+})
 
 // Contact request schema
 export const contactRequestSchema = z.object({
@@ -53,9 +53,9 @@ export const contactRequestSchema = z.object({
     .pipe(z.string().min(10, 'El mensaje debe tener al menos 10 caracteres'))
     .pipe(z.string().max(2000, 'El mensaje es demasiado largo')),
   propertyId: z.string().cuid().optional(),
-});
+})
 
-// Property schema for admin
+// Property schema
 export const propertySchema = z.object({
   title: sanitizedString
     .pipe(z.string().min(5, 'El título debe tener al menos 5 caracteres'))
@@ -95,31 +95,19 @@ export const propertySchema = z.object({
   hasAC: z.boolean().default(false),
   yearBuilt: z.number().int().min(1800).max(new Date().getFullYear() + 5).optional(),
   energyRating: z.string().max(10).optional(),
-  status: z.enum(['AVAILABLE', 'RESERVED', 'SOLD', 'RENTED', 'OFF_MARKET']).default('AVAILABLE'),
+  status: z.enum(['DRAFT', 'PENDING_REVIEW', 'AVAILABLE', 'RESERVED', 'SOLD', 'RENTED', 'OFF_MARKET']).default('DRAFT'),
   featured: z.boolean().default(false),
-});
+})
 
 // Image upload validation
 export const imageUploadSchema = z.object({
   filename: z.string().max(255),
   contentType: z.enum(['image/jpeg', 'image/png', 'image/webp']),
-  size: z.number().max(10 * 1024 * 1024, 'La imagen no puede superar 10MB'),
-});
+  size: z.number().max(2 * 1024 * 1024, 'La imagen no puede superar 2MB'),
+})
 
 // Types
-export type ValuationRequest = z.infer<typeof valuationRequestSchema>;
-export type ContactRequest = z.infer<typeof contactRequestSchema>;
-export type PropertyInput = z.infer<typeof propertySchema>;
-export type ImageUpload = z.infer<typeof imageUploadSchema>;
-
-// Validation helper function
-export function validateInput<T>(
-  schema: z.ZodSchema<T>,
-  data: unknown
-): { success: true; data: T } | { success: false; errors: z.ZodError } {
-  const result = schema.safeParse(data);
-  if (result.success) {
-    return { success: true, data: result.data };
-  }
-  return { success: false, errors: result.error };
-}
+export type ValuationRequest = z.infer<typeof valuationRequestSchema>
+export type ContactRequest = z.infer<typeof contactRequestSchema>
+export type PropertyInput = z.infer<typeof propertySchema>
+export type ImageUpload = z.infer<typeof imageUploadSchema>

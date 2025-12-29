@@ -1,76 +1,60 @@
-import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
+import { Resend } from 'resend'
 
-const sesClient = new SESClient({
-  region: process.env.AWS_REGION || 'eu-west-1',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY)
 
-const FROM_EMAIL = process.env.AWS_SES_FROM_EMAIL || 'info@klonvar.com';
-const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'info@klonvar.com';
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev'
+const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || 'info@klonvar.com'
 
 interface EmailOptions {
-  to?: string;
-  subject: string;
-  htmlBody: string;
-  textBody: string;
+  to?: string
+  subject: string
+  html: string
+  text?: string
 }
 
 export async function sendEmail(options: EmailOptions): Promise<boolean> {
-  const { to = NOTIFICATION_EMAIL, subject, htmlBody, textBody } = options;
-
-  const command = new SendEmailCommand({
-    Source: FROM_EMAIL,
-    Destination: {
-      ToAddresses: [to],
-    },
-    Message: {
-      Subject: {
-        Data: subject,
-        Charset: 'UTF-8',
-      },
-      Body: {
-        Html: {
-          Data: htmlBody,
-          Charset: 'UTF-8',
-        },
-        Text: {
-          Data: textBody,
-          Charset: 'UTF-8',
-        },
-      },
-    },
-  });
+  const { to = NOTIFICATION_EMAIL, subject, html, text } = options
 
   try {
-    await sesClient.send(command);
-    return true;
+    const { error } = await resend.emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject,
+      html,
+      text: text || html.replace(/<[^>]*>/g, ''),
+    })
+
+    if (error) {
+      console.error('Error sending email:', error)
+      return false
+    }
+
+    return true
   } catch (error) {
-    console.error('Error sending email:', error);
-    return false;
+    console.error('Error sending email:', error)
+    return false
   }
 }
 
 // Send valuation request notification
 export async function sendValuationNotification(data: {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  message?: string;
+  name: string
+  email: string
+  phone: string
+  address: string
+  message?: string
 }): Promise<boolean> {
-  const subject = `🏠 Nueva solicitud de valoración - ${data.name}`;
+  const subject = `🏠 Nueva solicitud de valoración - ${data.name}`
 
-  const htmlBody = `
+  const html = `
     <!DOCTYPE html>
     <html>
     <head>
       <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1d1d1f; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1d1d1f; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
         .header { background: linear-gradient(135deg, #1d1d1f, #2d2d2f); color: white; padding: 30px; border-radius: 16px 16px 0 0; }
+        .header h1 { margin: 0; font-size: 24px; }
         .content { padding: 30px; background: #fafafa; border-radius: 0 0 16px 16px; }
         .field { margin-bottom: 20px; padding: 15px; background: white; border-radius: 12px; }
         .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #6d6d6d; margin-bottom: 5px; }
@@ -80,7 +64,7 @@ export async function sendValuationNotification(data: {
     <body>
       <div class="container">
         <div class="header">
-          <h1 style="margin: 0; font-size: 24px;">Nueva Solicitud de Valoración</h1>
+          <h1>Nueva Solicitud de Valoración</h1>
         </div>
         <div class="content">
           <div class="field">
@@ -109,40 +93,31 @@ export async function sendValuationNotification(data: {
       </div>
     </body>
     </html>
-  `;
+  `
 
-  const textBody = `
-Nueva Solicitud de Valoración
-
-Nombre: ${data.name}
-Email: ${data.email}
-Teléfono: ${data.phone}
-Dirección: ${data.address}
-${data.message ? `Mensaje: ${data.message}` : ''}
-  `.trim();
-
-  return sendEmail({ subject, htmlBody, textBody });
+  return sendEmail({ subject, html })
 }
 
 // Send contact request notification
 export async function sendContactNotification(data: {
-  name: string;
-  email: string;
-  phone?: string;
-  subject?: string;
-  message: string;
-  propertyId?: string;
+  name: string
+  email: string
+  phone?: string
+  subject?: string
+  message: string
+  propertyId?: string
 }): Promise<boolean> {
-  const emailSubject = `📧 Nuevo contacto - ${data.subject || data.name}`;
+  const emailSubject = `📧 Nuevo contacto - ${data.subject || data.name}`
 
-  const htmlBody = `
+  const html = `
     <!DOCTYPE html>
     <html>
     <head>
       <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1d1d1f; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1d1d1f; margin: 0; padding: 0; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
         .header { background: linear-gradient(135deg, #1d1d1f, #2d2d2f); color: white; padding: 30px; border-radius: 16px 16px 0 0; }
+        .header h1 { margin: 0; font-size: 24px; }
         .content { padding: 30px; background: #fafafa; border-radius: 0 0 16px 16px; }
         .field { margin-bottom: 20px; padding: 15px; background: white; border-radius: 12px; }
         .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #6d6d6d; margin-bottom: 5px; }
@@ -152,7 +127,7 @@ export async function sendContactNotification(data: {
     <body>
       <div class="container">
         <div class="header">
-          <h1 style="margin: 0; font-size: 24px;">Nuevo Mensaje de Contacto</h1>
+          <h1>Nuevo Mensaje de Contacto</h1>
         </div>
         <div class="content">
           <div class="field">
@@ -189,18 +164,47 @@ export async function sendContactNotification(data: {
       </div>
     </body>
     </html>
-  `;
+  `
 
-  const textBody = `
-Nuevo Mensaje de Contacto
+  return sendEmail({ subject: emailSubject, html })
+}
 
-Nombre: ${data.name}
-Email: ${data.email}
-${data.phone ? `Teléfono: ${data.phone}` : ''}
-${data.subject ? `Asunto: ${data.subject}` : ''}
-Mensaje: ${data.message}
-${data.propertyId ? `Propiedad: ${data.propertyId}` : ''}
-  `.trim();
+// Send welcome email to new users
+export async function sendWelcomeEmail(data: {
+  email: string
+  name: string
+}): Promise<boolean> {
+  const subject = `¡Bienvenido a Klonvar, ${data.name}!`
 
-  return sendEmail({ subject: emailSubject, htmlBody, textBody });
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1d1d1f; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; padding: 40px 30px; border-radius: 16px 16px 0 0; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; }
+        .content { padding: 40px 30px; background: #fafafa; border-radius: 0 0 16px 16px; text-align: center; }
+        .button { display: inline-block; padding: 14px 32px; background: #1d1d1f; color: white; text-decoration: none; border-radius: 980px; font-weight: 500; margin-top: 20px; }
+        p { margin: 0 0 16px 0; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>¡Bienvenido a Klonvar!</h1>
+        </div>
+        <div class="content">
+          <p>Hola ${data.name},</p>
+          <p>Gracias por registrarte en Klonvar. Estamos encantados de tenerte con nosotros.</p>
+          <p>Desde tu portal podrás gestionar tus propiedades, documentos y comunicarte directamente con nuestro equipo.</p>
+          <a href="${process.env.NEXT_PUBLIC_APP_URL}/portal/dashboard" class="button">Acceder al Portal</a>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+
+  return sendEmail({ to: data.email, subject, html })
 }
