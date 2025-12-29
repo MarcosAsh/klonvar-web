@@ -212,7 +212,7 @@ export function PropertyCard({ property }: { property: Property }) {
                 alignItems="center"
                 justifyContent="center"
               >
-                <Icon as={FiBed} boxSize={4} color="brand.glass.600" />
+                <Icon as={IoBedOutline} boxSize={4} color="brand.glass.600" />
               </Box>
               <Text fontSize="14px" fontWeight="600" color="brand.charcoal.800">
                 {property.bedrooms}
