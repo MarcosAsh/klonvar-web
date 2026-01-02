@@ -261,71 +261,82 @@ export default function AdminInvoicesPage() {
         </Text>
       </MotionBox>
 
-      {/* Stats */}
+     {/* Stats */}
       <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
-        <GlassCard variant="default" cursor="pointer" onClick={() => setStatusFilter('')}>
-          <Stat>
-            <StatLabel color="gray.500">Total</StatLabel>
-            <StatNumber fontSize="2xl">{counts.total}</StatNumber>
-          </Stat>
-        </GlassCard>
-        <GlassCard
-          variant="default"
+        <Box cursor="pointer" onClick={() => setStatusFilter('')}>
+          <GlassCard variant="default">
+            <Stat>
+              <StatLabel color="gray.500">Total</StatLabel>
+              <StatNumber fontSize="2xl">{counts.total}</StatNumber>
+            </Stat>
+          </GlassCard>
+        </Box>
+        <Box
           cursor="pointer"
           onClick={() => setStatusFilter('PENDING')}
-          borderLeft={statusFilter === 'PENDING' ? '3px solid' : 'none'}
-          borderColor="yellow.400"
         >
-          <Stat>
-            <StatLabel color="yellow.600">
-              <HStack>
-                <Icon as={FiClock} />
-                <Text>Pendientes</Text>
-              </HStack>
-            </StatLabel>
-            <StatNumber fontSize="2xl" color="yellow.600">
-              {counts.PENDING}
-            </StatNumber>
-          </Stat>
-        </GlassCard>
-        <GlassCard
-          variant="default"
+          <GlassCard
+            variant="default"
+            borderLeft={statusFilter === 'PENDING' ? '3px solid' : 'none'}
+            borderColor="yellow.400"
+          >
+            <Stat>
+              <StatLabel color="yellow.600">
+                <HStack>
+                  <Icon as={FiClock} />
+                  <Text>Pendientes</Text>
+                </HStack>
+              </StatLabel>
+              <StatNumber fontSize="2xl" color="yellow.600">
+                {counts.PENDING}
+              </StatNumber>
+            </Stat>
+          </GlassCard>
+        </Box>
+        <Box
           cursor="pointer"
           onClick={() => setStatusFilter('PROCESSING')}
-          borderLeft={statusFilter === 'PROCESSING' ? '3px solid' : 'none'}
-          borderColor="blue.400"
         >
-          <Stat>
-            <StatLabel color="blue.600">
-              <HStack>
-                <Icon as={FiLoader} />
-                <Text>En Proceso</Text>
-              </HStack>
-            </StatLabel>
-            <StatNumber fontSize="2xl" color="blue.600">
-              {counts.PROCESSING}
-            </StatNumber>
-          </Stat>
-        </GlassCard>
-        <GlassCard
-          variant="default"
+          <GlassCard
+            variant="default"
+            borderLeft={statusFilter === 'PROCESSING' ? '3px solid' : 'none'}
+            borderColor="blue.400"
+          >
+            <Stat>
+              <StatLabel color="blue.600">
+                <HStack>
+                  <Icon as={FiLoader} />
+                  <Text>En Proceso</Text>
+                </HStack>
+              </StatLabel>
+              <StatNumber fontSize="2xl" color="blue.600">
+                {counts.PROCESSING}
+              </StatNumber>
+            </Stat>
+          </GlassCard>
+        </Box>
+        <Box
           cursor="pointer"
           onClick={() => setStatusFilter('COMPLETED')}
-          borderLeft={statusFilter === 'COMPLETED' ? '3px solid' : 'none'}
-          borderColor="green.400"
         >
-          <Stat>
-            <StatLabel color="green.600">
-              <HStack>
-                <Icon as={FiCheckCircle} />
-                <Text>Completadas</Text>
-              </HStack>
-            </StatLabel>
-            <StatNumber fontSize="2xl" color="green.600">
-              {counts.COMPLETED}
-            </StatNumber>
-          </Stat>
-        </GlassCard>
+          <GlassCard
+            variant="default"
+            borderLeft={statusFilter === 'COMPLETED' ? '3px solid' : 'none'}
+            borderColor="green.400"
+          >
+            <Stat>
+              <StatLabel color="green.600">
+                <HStack>
+                  <Icon as={FiCheckCircle} />
+                  <Text>Completadas</Text>
+                </HStack>
+              </StatLabel>
+              <StatNumber fontSize="2xl" color="green.600">
+                {counts.COMPLETED}
+              </StatNumber>
+            </Stat>
+          </GlassCard>
+        </Box>
       </SimpleGrid>
 
       {/* Filter */}
