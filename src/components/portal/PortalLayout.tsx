@@ -32,7 +32,6 @@ import {
   FiHome,
   FiClipboard,
   FiFileText,
-  FiMessageSquare,
   FiBell,
   FiSettings,
   FiLogOut,
@@ -44,7 +43,6 @@ const navLinks = [
   { href: '/portal/dashboard', label: 'Inicio', icon: FiHome },
   { href: '/portal/properties', label: 'Propiedades', icon: FiClipboard },
   { href: '/portal/documents', label: 'Documentos', icon: FiFileText },
-  { href: '/portal/messages', label: 'Mensajes', icon: FiMessageSquare },
 ]
 
 interface PortalLayoutProps {

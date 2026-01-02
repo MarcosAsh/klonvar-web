@@ -45,6 +45,7 @@ model Property {
   messages     Message[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  invoiceRequests InvoiceRequest[]
 
   @@index([status])
   @@index([propertyType])
@@ -94,6 +95,7 @@ model Client {
   lastLoginAt       DateTime?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  invoiceRequests InvoiceRequest[]
 
   @@index([email])
   @@index([authId])
@@ -274,6 +276,31 @@ model AdminUser {
   updatedAt       DateTime   @updatedAt
 
   @@index([authId])
+}
+
+model InvoiceRequest {
+  id           String    @id @default(cuid())
+  description  String    @db.Text
+  amount       Float?
+  invoiceType  String    @default("OTHER") // RENT, MAINTENANCE, SERVICE, OTHER
+  status       String    @default("PENDING") // PENDING, PROCESSING, COMPLETED, REJECTED
+  adminNotes   String?   @db.Text
+  
+  clientId     String
+  client       Client    @relation(fields: [clientId], references: [id])
+  
+  propertyId   String?
+  property     Property? @relation(fields: [propertyId], references: [id])
+  
+  processedBy  String?
+  processedAt  DateTime?
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([clientId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 // Enums

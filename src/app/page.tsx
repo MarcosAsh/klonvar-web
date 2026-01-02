@@ -431,15 +431,13 @@ export default function HomePage() {
                   p={0}
                   overflow="hidden"
                 >
-                  <Box h="180px" bg="linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%)" position="relative">
-                    <Icon
-                      as={FiHome}
-                      position="absolute"
-                      top="50%"
-                      left="50%"
-                      transform="translate(-50%, -50%)"
-                      boxSize={16}
-                      color="whiteAlpha.200"
+                  <Box h="180px" position="relative" overflow="hidden">
+                    <Image
+                      src="/piso_hero.jpg"
+                      alt="Piso destacado"
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
                     />
                     <GlassPill colorScheme="teal" position="absolute" top={4} left={4}>
                       Destacado

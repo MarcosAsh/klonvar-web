@@ -411,7 +411,7 @@ export default function PropertyDetailPage() {
                 <VStack spacing={3}>
                   <Button
                     as="a"
-                    href="https://wa.me/34XXXXXXXXX"
+                    href="https://wa.me/34653945930"
                     target="_blank"
                     variant="primary"
                     size="lg"
@@ -422,7 +422,7 @@ export default function PropertyDetailPage() {
                   </Button>
                   <Button
                     as="a"
-                    href="tel:+34XXXXXXXXX"
+                    href="tel:+34653945930"
                     variant="secondary"
                     size="lg"
                     width="100%"

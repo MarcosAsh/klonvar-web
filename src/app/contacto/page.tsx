@@ -30,27 +30,27 @@ const contactInfo = [
   {
     icon: FiPhone,
     label: 'Teléfono',
-    value: '+34 XXX XXX XXX',
-    href: 'tel:+34XXXXXXXXX',
+    value: '+34 653 945 930',
+    href: 'tel:+34653945930',
   },
   {
     icon: FaWhatsapp,
     label: 'WhatsApp',
     value: 'Escríbenos',
-    href: 'https://wa.me/34XXXXXXXXX',
+    href: 'https://wa.me/34653945930',
     external: true,
   },
   {
     icon: FiMail,
     label: 'Email',
-    value: 'info@klonvar.com',
-    href: 'mailto:info@klonvar.com',
+    value: 'miguel@klonvar.com',
+    href: 'mailto:miguel@klonvar.com',
   },
   {
     icon: FiMapPin,
     label: 'Dirección',
     value: 'Avda. García Tapia 171\nLocal 3, 28030 Madrid',
-    href: 'https://maps.google.com',
+    href: 'https://maps.google.com/?q=Avda.+García+Tapia+171,+28030+Madrid',
     external: true,
   },
 ];
@@ -83,6 +83,8 @@ export default function ContactoPage() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setIsSubmitted(true);
         toast({
@@ -92,9 +94,13 @@ export default function ContactoPage() {
           duration: 5000,
         });
       } else {
+        // Show validation error if available
+        const errorMessage = data.details?.fieldErrors 
+          ? Object.values(data.details.fieldErrors).flat()[0] as string
+          : data.error || 'No se pudo enviar el mensaje.';
         toast({
           title: 'Error',
-          description: 'No se pudo enviar el mensaje.',
+          description: errorMessage,
           status: 'error',
           duration: 5000,
         });

@@ -31,6 +31,7 @@ const navLinks = [
   { href: '/comprar', label: 'Comprar' },
   { href: '/propiedades', label: 'Propiedades' },
   { href: '/nosotros', label: 'Nosotros' },
+  { href: '/juridico', label: 'Jurídico' },
   { href: '/contacto', label: 'Contacto' },
 ];
 
@@ -73,8 +74,8 @@ export function Header() {
                   h="40px"
                   fallback={
                     <Box
-                      w="40px"
-                      h="40px"
+                      w="50px"
+                      h="50px"
                       borderRadius="12px"
                       bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
                       display="flex"

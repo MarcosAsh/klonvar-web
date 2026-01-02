@@ -22,7 +22,7 @@ import {
   IconButton,
   Image,
 } from '@chakra-ui/react';
-import { FiHome, FiGrid, FiUsers, FiFileText, FiMail, FiSettings, FiLogOut, FiMenu, FiChevronDown } from 'react-icons/fi';
+import { FiHome, FiGrid, FiUsers, FiFileText, FiSettings, FiLogOut, FiMenu, FiChevronDown } from 'react-icons/fi';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createBrowserClient } from '@supabase/ssr';
@@ -33,7 +33,6 @@ const navItems = [
   { icon: FiGrid, label: 'Propiedades', href: '/admin/properties' },
   { icon: FiUsers, label: 'Clientes', href: '/admin/clients' },
   { icon: FiFileText, label: 'Solicitudes', href: '/admin/requests' },
-  { icon: FiMail, label: 'Mensajes', href: '/admin/messages' },
   { icon: FiSettings, label: 'Configuración', href: '/admin/settings' },
 ];
 
@@ -82,7 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (pathname === '/admin/login') {
-      setLoading(false);
+      setLoading(false);requests
       return;
     }
 

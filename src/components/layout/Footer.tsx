@@ -36,6 +36,7 @@ const footerLinks = {
   ],
   empresa: [
     { label: 'Sobre nosotros', href: '/nosotros' },
+    { label: 'Servicios jurídicos', href: '/juridico' },
     { label: 'Contacto', href: '/contacto' },
   ],
   legal: [
@@ -46,10 +47,10 @@ const footerLinks = {
 };
 
 const contactInfo = {
-  phone: '+34 XXX XXX XXX',
-  email: 'info@klonvar.com',
+  phone: '+34 653 945 930',
+  email: 'miguel@klonvar.com',
   address: 'Avda. García Tapia 171\nLocal 3, 28030 Madrid',
-  whatsapp: '+34XXXXXXXXX',
+  whatsapp: '34653945930',
 };
 
 const socialLinks = [
@@ -107,7 +108,7 @@ export function Footer() {
                     src="/logo.png"
                     alt="Klonvar"
                     h="48px"
-                    filter="brightness(0) invert(1)"
+                    filter="brightness(0.85) invert(1)"
                     fallback={
                       <Box
                         w="48px"

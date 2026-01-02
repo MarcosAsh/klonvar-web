@@ -45,10 +45,14 @@ export const contactRequestSchema = z.object({
     .pipe(z.string().min(2, 'El nombre debe tener al menos 2 caracteres'))
     .pipe(z.string().max(100, 'El nombre es demasiado largo')),
   email: emailSchema,
-  phone: phoneSchema.optional(),
+  phone: z.union([
+    z.literal(''),
+    phoneSchema
+  ]).optional().transform(val => val || undefined),
   subject: sanitizedString
     .pipe(z.string().max(200, 'El asunto es demasiado largo'))
-    .optional(),
+    .optional()
+    .or(z.literal('')),
   message: sanitizedString
     .pipe(z.string().min(10, 'El mensaje debe tener al menos 10 caracteres'))
     .pipe(z.string().max(2000, 'El mensaje es demasiado largo')),

@@ -20,7 +20,6 @@ import { useEffect, useState } from 'react'
 import {
   FiHome,
   FiFileText,
-  FiMessageSquare,
   FiBell,
   FiPlus,
   FiUpload,
@@ -35,7 +34,6 @@ const MotionBox = motion(Box)
 interface DashboardStats {
   properties: number
   documents: number
-  unreadMessages: number
   notifications: number
 }
 
@@ -60,7 +58,6 @@ export default function PortalDashboardPage() {
   const [stats, setStats] = useState<DashboardStats>({
     properties: 0,
     documents: 0,
-    unreadMessages: 0,
     notifications: 0,
   })
   const [recentProperties, setRecentProperties] = useState<RecentProperty[]>([])
@@ -131,11 +128,10 @@ export default function PortalDashboardPage() {
         </MotionBox>
 
         {/* Stats */}
-        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>
+        <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4}>
           {[
             { label: 'Propiedades', value: stats.properties, icon: FiHome, href: '/portal/properties' },
             { label: 'Documentos', value: stats.documents, icon: FiFileText, href: '/portal/documents' },
-            { label: 'Mensajes', value: stats.unreadMessages, icon: FiMessageSquare, href: '/portal/messages' },
             { label: 'Notificaciones', value: stats.notifications, icon: FiBell, href: '/portal/notifications' },
           ].map((stat, i) => (
             <MotionBox
@@ -158,7 +154,7 @@ export default function PortalDashboardPage() {
                     >
                       <Icon as={stat.icon} boxSize={5} color="brand.glass.600" />
                     </Box>
-                    {stat.value > 0 && stat.label !== 'Propiedades' && stat.label !== 'Documentos' && (
+                    {stat.value > 0 && stat.label === 'Notificaciones' && (
                       <Box
                         bg="red.500"
                         color="white"
@@ -276,17 +272,6 @@ export default function PortalDashboardPage() {
                     justifyContent="flex-start"
                   >
                     Subir documento
-                  </Button>
-                </Link>
-                <Link href="/portal/messages">
-                  <Button
-                    variant="glass"
-                    size="lg"
-                    leftIcon={<FiMessageSquare />}
-                    w="100%"
-                    justifyContent="flex-start"
-                  >
-                    Enviar mensaje
                   </Button>
                 </Link>
               </VStack>
