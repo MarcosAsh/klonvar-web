@@ -13,7 +13,7 @@ async function main() {
     create: {
       email: 'admin@klonvar.com',
       name: 'Admin',
-      password: hashedPassword,
+      password: 'hashedPassword',
       role: 'ADMIN',
     },
   })

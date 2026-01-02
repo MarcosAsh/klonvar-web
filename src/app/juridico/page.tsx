@@ -232,7 +232,6 @@ export default function JuridicoPage() {
                   _hover={{
                     transform: 'translateY(-4px)',
                   }}
-                  transition="all 0.3s ease"
                 >
                   <Box
                     w={14}

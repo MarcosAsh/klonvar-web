@@ -81,7 +81,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (pathname === '/admin/login') {
-      setLoading(false);requests
+      setLoading(false);
       return;
     }
 
