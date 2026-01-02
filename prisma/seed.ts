@@ -1,31 +1,29 @@
 import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
 async function main() {
-  // Create admin user
-  const hashedPassword = await bcrypt.hash('admin123', 10)
-  
+  // Create admin user (password is handled by Supabase Auth, not stored here)
   const admin = await prisma.adminUser.upsert({
     where: { email: 'admin@klonvar.com' },
     update: {},
     create: {
+      authId: 'supabase-auth-id-here', // This should match the Supabase Auth user ID
       email: 'admin@klonvar.com',
       name: 'Admin',
-      password: 'hashedPassword',
       role: 'ADMIN',
     },
   })
 
-  console.log('Admin user created:', admin.email)
+  console.log({ admin })
 }
 
 main()
-  .catch((e) => {
-    console.error(e)
-    process.exit(1)
-  })
-  .finally(async () => {
+  .then(async () => {
     await prisma.$disconnect()
+  })
+  .catch(async (e) => {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
   })
