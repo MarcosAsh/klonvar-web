@@ -107,12 +107,12 @@ export function Footer() {
                   <Image
                     src="/logo.png"
                     alt="Klonvar"
-                    h="48px"
+                    h="70px"
                     filter="brightness(0.85) invert(1)"
                     fallback={
                       <Box
-                        w="48px"
-                        h="48px"
+                        w="70px"
+                        h="70px"
                         borderRadius="14px"
                         bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
                         display="flex"

@@ -258,7 +258,7 @@ export default function HomePage() {
   return (
     <Box bg="#fafafa" minH="100vh">
       <Header />
-
+      
       {/* Hero Section */}
       <Box
         ref={heroRef}

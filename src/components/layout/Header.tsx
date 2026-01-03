@@ -71,11 +71,11 @@ export function Header() {
                 <Image
                   src="/logo.png"
                   alt="Klonvar"
-                  h="40px"
+                  h="120px"
                   fallback={
                     <Box
-                      w="50px"
-                      h="50px"
+                      w="120px"
+                      h="1200px"
                       borderRadius="12px"
                       bg="linear-gradient(135deg, rgba(6, 182, 212, 0.9) 0%, rgba(6, 182, 212, 0.7) 100%)"
                       display="flex"
