@@ -46,8 +46,6 @@ const contactInfo = [
     value: 'miguel@klonvar.com',
     href: 'mailto:miguel@klonvar.com',
   },
-  {
-  },
 ];
 
 export default function ContactoPage() {
