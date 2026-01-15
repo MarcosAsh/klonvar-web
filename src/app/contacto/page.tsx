@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { FiPhone, FiMail, FiSend, FiCheck, FiArrowUpRight } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Header, Footer } from '@/components/layout';
 import { GlassCard, GlassPill } from '@/components/ui/GlassCard';
