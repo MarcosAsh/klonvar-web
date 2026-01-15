@@ -16,7 +16,6 @@ import Link from 'next/link';
 import {
   FiPhone,
   FiMail,
-  FiMapPin,
   FiInstagram,
   FiFacebook,
   FiLinkedin,
@@ -48,8 +47,7 @@ const footerLinks = {
 
 const contactInfo = {
   phone: '+34 653 945 930',
-  email: 'miguel@klonvar.com',
-  address: 'Avda. García Tapia 171\nLocal 3, 28030 Madrid',
+  email: 'info@klonvar.com',
   whatsapp: '34653945930',
 };
 
@@ -349,29 +347,6 @@ export function Footer() {
                         {contactInfo.email}
                       </Text>
                     </a>
-                  </HStack>
-
-                  <HStack spacing={3} align="flex-start">
-                    <Box
-                      w="36px"
-                      h="36px"
-                      borderRadius="10px"
-                      bg="rgba(6, 182, 212, 0.15)"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      flexShrink={0}
-                    >
-                      <Icon as={FiMapPin} boxSize={4} color="brand.glass.400" />
-                    </Box>
-                    <Text
-                      color="whiteAlpha.800"
-                      fontSize="15px"
-                      whiteSpace="pre-line"
-                      lineHeight="1.5"
-                    >
-                      {contactInfo.address}
-                    </Text>
                   </HStack>
                 </VStack>
               </Box>
