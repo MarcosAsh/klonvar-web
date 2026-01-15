@@ -9,9 +9,9 @@ interface BackgroundWatermarkProps {
 }
 
 export function BackgroundWatermark({ 
-  opacity = 0.03, 
+  opacity = 0.5, 
   position = 'center',
-  size = '50vw'
+  size = '200vw'
 }: BackgroundWatermarkProps) {
   const positionStyles = {
     'center': {
