@@ -180,7 +180,7 @@ export default function PropertyDetailPage() {
       <Header />
 
       {/* Back Button */}
-      <Container maxW="container.xl" pt={28} pb={4}>
+      <Container maxW="container.xl" pt={32} pb={4}>
         <Link href="/propiedades">
           <Button variant="ghost" leftIcon={<FiArrowLeft />} size="sm">
             Volver a propiedades

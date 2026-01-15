@@ -155,7 +155,7 @@ export default function ValoracionPage() {
       {/* Hero Section */}
       <Box
         position="relative"
-        pt={{ base: 32, md: 40 }}
+        pt={{ base: 36, md: 40 }}
         pb={{ base: 20, md: 32 }}
         overflow="hidden"
       >

@@ -329,7 +329,7 @@ export default function HomePage() {
             templateColumns={{ base: '1fr', lg: '1.1fr 1fr' }}
             gap={{ base: 12, lg: 20 }}
             alignItems="center"
-            pt={{ base: 32, md: 0 }}
+            pt={{ base: 36, md: 0 }}
           >
             {/* Hero Content */}
             <GridItem>

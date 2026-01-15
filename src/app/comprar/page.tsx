@@ -113,7 +113,7 @@ export default function ComprarPage() {
           }}
         />
 
-        <Container maxW="container.xl" position="relative" zIndex={1} pt={{ base: 32, md: 40 }} pb={{ base: 20, md: 28 }}>
+        <Container maxW="container.xl" position="relative" zIndex={1} pt={{ base: 36, md: 40 }} pb={{ base: 20, md: 28 }}>
           <VStack spacing={6} textAlign="center" maxW="700px" mx="auto">
             <MotionBox
               initial={{ opacity: 0, y: 20 }}
