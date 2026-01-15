@@ -68,7 +68,7 @@ const benefits = [
   'Valoración profesional y realista',
   'Marketing inmobiliario de calidad',
   'Filtrado de compradores solventes',
-  'Acompañamiento hasta la firma',
+  'Acompañamiento hasta la firma en Notaría',
   'Sin costes ocultos',
 ];
 

@@ -296,14 +296,14 @@ export default function JuridicoPage() {
               </Button>
               <Button
                 as="a"
-                href="mailto:info@klonvar.com"
+                href="mailto:juridico@klonvar.com"
                 size="lg"
                 variant="outline"
                 borderRadius="full"
                 px={8}
                 leftIcon={<FiMail />}
               >
-                info@klonvar.com
+                juridico@klonvar.com
               </Button>
             </HStack>
           </GlassCard>

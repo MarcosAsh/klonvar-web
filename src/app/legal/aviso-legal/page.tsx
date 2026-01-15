@@ -29,7 +29,6 @@ export default function AvisoLegalPage() {
               <Box mt={4} p={4} bg="white" borderRadius="lg">
                 <Text><strong>Denominación social:</strong> Klonvar Invest S.L.</Text>
                 <Text><strong>CIF:</strong> B-XXXXXXXX</Text>
-                <Text><strong>Domicilio:</strong> Avda. García Tapia 171, Local 3, 28030 Madrid</Text>
                 <Text><strong>Email:</strong> info@klonvar.com</Text>
                 <Text><strong>Teléfono:</strong> +34 XXX XXX XXX</Text>
               </Box>
