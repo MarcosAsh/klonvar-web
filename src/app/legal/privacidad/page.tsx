@@ -26,7 +26,6 @@ export default function PrivacidadPage() {
               <Text color="gray.600" lineHeight="1.8">
                 <strong>Identidad:</strong> Klonvar Invest S.L.<br />
                 <strong>CIF:</strong> B-XXXXXXXX<br />
-                <strong>Dirección:</strong> Avda. García Tapia 171, Local 3, 28030 Madrid<br />
                 <strong>Email:</strong> info@klonvar.com
               </Text>
             </Box>

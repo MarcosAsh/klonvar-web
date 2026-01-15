@@ -99,7 +99,6 @@ export default function AdminSettingsPage() {
           </FormControl>
           <FormControl>
             <FormLabel>Dirección</FormLabel>
-            <Input defaultValue="Avda. García Tapia 171, Local 3, 28030 Madrid" />
           </FormControl>
         </VStack>
       </Box>
