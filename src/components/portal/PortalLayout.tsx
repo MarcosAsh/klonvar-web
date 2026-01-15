@@ -57,7 +57,7 @@ export function PortalLayout({ children }: PortalLayoutProps) {
   const isActive = (href: string) => pathname.startsWith(href)
 
   return (
-    <Box minH="100vh" bg="#fafafa">
+    <Box minH="100vh" bg="rgba(250, 250, 250, 0.85)">
       {/* Header */}
       <Box
         as="header"

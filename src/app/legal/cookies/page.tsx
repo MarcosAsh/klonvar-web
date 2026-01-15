@@ -17,7 +17,7 @@ import { Header, Footer } from '@/components/layout';
 
 export default function CookiesPage() {
   return (
-    <Box bg="#fafafa" minH="100vh">
+    <Box bg="rgba(250, 250, 250, 0.85)" minH="100vh">
       <Header />
 
       <Container maxW="container.md" pt={32} pb={20}>

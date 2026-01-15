@@ -135,7 +135,7 @@ export default function PropertyDetailPage() {
 
   if (loading) {
     return (
-      <Box bg="#fafafa" minH="100vh">
+      <Box bg="rgba(250, 250, 250, 0.85)" minH="100vh">
         <Header />
         <Center py={40}>
           <VStack spacing={4}>
@@ -150,7 +150,7 @@ export default function PropertyDetailPage() {
 
   if (!property) {
     return (
-      <Box bg="#fafafa" minH="100vh">
+      <Box bg="rgba(250, 250, 250, 0.85)" minH="100vh">
         <Header />
         <Container maxW="container.xl" py={40}>
           <VStack spacing={6} textAlign="center">
@@ -176,7 +176,7 @@ export default function PropertyDetailPage() {
   );
 
   return (
-    <Box bg="#fafafa" minH="100vh">
+    <Box bg="rgba(250, 250, 250, 0.85)" minH="100vh">
       <Header />
 
       {/* Back Button */}

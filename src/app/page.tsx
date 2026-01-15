@@ -256,7 +256,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <Box bg="#fafafa" minH="100vh">
+    <Box bg="rgba(250, 250, 250, 0.85)" minH="100vh">
       <Header />
       
       {/* Hero Section */}

@@ -8,7 +8,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <ChakraProvider theme={theme}>
       <AuthProvider>
         {/* Background color for the whole app */}
-        <Box bg="#fafafa" minH="100vh">
+        <Box bg="rgba(250, 250, 250, 0.85)" minH="100vh">
           {/* Watermark - behind everything */}
           <img 
             src="/logo.png" 
@@ -19,8 +19,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
               transform: 'translate(-50%, -50%)',
               width: '70vw',
               maxWidth: '900px',
-              opacity: 0.15,
-              zIndex: 5,
+              opacity: 0.5,
+              zIndex: 1,
               pointerEvents: 'none',
               filter: 'grayscale(100%)'
             }}
